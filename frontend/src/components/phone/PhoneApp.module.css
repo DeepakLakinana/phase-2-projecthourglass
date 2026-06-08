@@ -1,0 +1,595 @@
+/* Phone App Shared Styles */
+
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f2f2f7;
+  overflow: hidden;
+}
+
+/* App navigation bar */
+.appBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: rgba(242, 242, 247, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  min-height: 44px;
+  flex-shrink: 0;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  min-width: 60px;
+  text-align: left;
+  font-family: '-apple-system', 'San Francisco', sans-serif;
+}
+
+.backBtn:active { opacity: 0.6; }
+
+.appTitle {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #000;
+  font-family: '-apple-system', 'San Francisco', sans-serif;
+}
+
+/* Gallery */
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  padding: 2px;
+}
+
+.photoThumb {
+  aspect-ratio: 1;
+  background: #2c2c2e;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photoThumb:active { opacity: 0.8; }
+
+.thumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+
+.thumbPlaceholder {
+  font-size: 2rem;
+  z-index: 1;
+  opacity: 0.4;
+}
+
+/* Photo detail */
+.photoDetail {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.8rem;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullPhotoWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1c1c1e;
+  overflow: hidden;
+}
+
+.fullPhoto {
+  max-width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+}
+
+.photoMeta {
+  background: #1c1c1e;
+  padding: 12px 16px;
+  border-top: 1px solid #3a3a3c;
+}
+
+.photoCaption {
+  color: #fff;
+  font-size: 0.85rem;
+  font-family: '-apple-system', sans-serif;
+  margin-bottom: 4px;
+}
+
+.photoDate {
+  color: #636366;
+  font-size: 0.75rem;
+  font-family: '-apple-system', sans-serif;
+  margin-bottom: 8px;
+}
+
+.filenameBox {
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 8px;
+  border: 1px solid rgba(255,149,0,0.3);
+}
+
+.filenameLabel {
+  display: block;
+  color: #ff9500;
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-family: '-apple-system', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.filename {
+  color: #ffd60a;
+  font-size: 0.7rem;
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+  display: block;
+  line-height: 1.5;
+}
+
+/* Messages */
+.chatContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #f2f2f7;
+}
+
+.bubble {
+  max-width: 75%;
+  padding: 8px 12px;
+  border-radius: 18px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  font-family: '-apple-system', sans-serif;
+}
+
+.bubbleReceived {
+  background: #e5e5ea;
+  color: #000;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.bubbleSent {
+  background: #0a84ff;
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.msgTime {
+  font-size: 0.65rem;
+  color: #8e8e93;
+  align-self: flex-end;
+  font-family: '-apple-system', sans-serif;
+}
+
+.msgTimeSent {
+  align-self: flex-end;
+}
+
+.clueMark {
+  display: inline-block;
+  background: rgba(255,149,0,0.2);
+  border: 1px solid rgba(255,149,0,0.5);
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #ff9500;
+  margin-top: 4px;
+}
+
+/* Voice Notes */
+.voiceList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: #f2f2f7;
+}
+
+.voiceItem {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.voiceItem:active { background: #f2f2f7; }
+
+.voiceItemActive {
+  background: #f0f8ff;
+  box-shadow: 0 0 0 2px #0a84ff44;
+}
+
+.voiceIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ff3b30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.voiceMeta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.voiceTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #000;
+  font-family: '-apple-system', sans-serif;
+}
+
+.voiceDate {
+  font-size: 0.72rem;
+  color: #8e8e93;
+  font-family: '-apple-system', sans-serif;
+}
+
+.voiceDuration {
+  font-size: 0.75rem;
+  color: #8e8e93;
+  font-family: 'Courier New', monospace;
+}
+
+/* Audio Player */
+.audioPlayer {
+  background: #1c1c1e;
+  padding: 16px;
+  border-top: 1px solid #3a3a3c;
+}
+
+.audioTitle {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-family: '-apple-system', sans-serif;
+}
+
+.nativeAudio {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.morseHint {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: #ff9500;
+  background: rgba(255,149,0,0.1);
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+/* Browser History */
+.historyList {
+  flex: 1;
+  overflow-y: auto;
+  background: #f2f2f7;
+}
+
+.historyGroup {
+  padding: 8px 0;
+}
+
+.historyDate {
+  padding: 6px 16px;
+  font-size: 0.7rem;
+  color: #8e8e93;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: '-apple-system', sans-serif;
+}
+
+.historyItem {
+  background: #fff;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  cursor: pointer;
+}
+
+.historyItem:active { background: #f2f2f7; }
+
+.historyFavicon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.historyContent { flex: 1; min-width: 0; }
+
+.historyTitle {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #000;
+  font-family: '-apple-system', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.historyUrl {
+  font-size: 0.7rem;
+  color: #0a84ff;
+  font-family: '-apple-system', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.historyTime {
+  font-size: 0.7rem;
+  color: #8e8e93;
+  font-family: '-apple-system', sans-serif;
+  flex-shrink: 0;
+}
+
+/* Maps */
+.mapContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #2c2c2e;
+  position: relative;
+  overflow: hidden;
+}
+
+.corruptedMap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    repeating-linear-gradient(45deg, #1c1c1e, #1c1c1e 10px, #2c2c2e 10px, #2c2c2e 20px);
+  position: relative;
+}
+
+.mapOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.coordBox {
+  background: rgba(0,0,0,0.8);
+  border: 1px solid rgba(255,149,0,0.4);
+  border-radius: 10px;
+  padding: 12px 16px;
+  text-align: center;
+}
+
+.coordLabel {
+  color: #ff9500;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: 'Courier New', monospace;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.coordValue {
+  color: #ffd60a;
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+.coordMissing {
+  color: #ff3b30;
+  opacity: 0.6;
+}
+
+.corruptedWarning {
+  background: rgba(255,59,48,0.15);
+  border: 1px solid rgba(255,59,48,0.4);
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: #ff3b30;
+  font-size: 0.75rem;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+}
+
+.mapHint {
+  background: rgba(0,0,0,0.8);
+  padding: 10px 14px;
+  border-top: 1px solid #3a3a3c;
+}
+
+.mapHintText {
+  color: #8e8e93;
+  font-size: 0.7rem;
+  font-family: '-apple-system', sans-serif;
+  line-height: 1.5;
+}
+
+/* Downloads */
+.downloadsList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  background: #f2f2f7;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.downloadItem {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.downloadItem:active { background: #f2f2f7; }
+
+.downloadIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.downloadMeta { flex: 1; min-width: 0; }
+
+.downloadName {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #000;
+  font-family: '-apple-system', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.downloadSize {
+  font-size: 0.72rem;
+  color: #8e8e93;
+  font-family: '-apple-system', sans-serif;
+}
+
+.downloadClue {
+  background: rgba(88,86,214,0.1);
+  border: 1px solid rgba(88,86,214,0.3);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.65rem;
+  color: #5856d6;
+  font-weight: 600;
+}
+
+/* File detail */
+.fileDetail {
+  flex: 1;
+  overflow-y: auto;
+  background: #f2f2f7;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fileCard {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+
+.fileCardTitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #8e8e93;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: '-apple-system', sans-serif;
+  margin-bottom: 6px;
+}
+
+.fileCardContent {
+  font-size: 0.85rem;
+  color: #000;
+  font-family: '-apple-system', sans-serif;
+  line-height: 1.6;
+}
+
+.clueHighlight {
+  background: rgba(255,204,0,0.2);
+  border: 1px solid rgba(255,204,0,0.5);
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 8px;
+}
+
+.clueHighlightLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #ff9500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.clueHighlightText {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #000;
+  word-break: break-all;
+}

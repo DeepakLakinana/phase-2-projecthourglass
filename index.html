@@ -189,7 +189,7 @@
       <p>The system reports that this is the last memory checkpoint recorded before Sam disappeared. However, the memory has been damaged. Important details have been shattered into fragments, making it impossible to determine exactly when Sam was last seen.</p>
       <p>Scattered around the memory are pieces of a broken timeline.</p>
       <p style="color: var(--accent-gold); font-weight: bold;">Figure out the timeline( year, month, date) and the coordinates where Sam is stuck in and get him back!</p>
-      <button style="margin-top: 2rem;" onclick="nav('round1-year'); reportProgress('Round 1: Year Challenge');">Initiate Recovery →</button>
+      <button style="margin-top: 2rem;" onclick="nav('round1-year'); reportProgress('Round 1: Year Challenge'); initJigsaw('jigsaw-year', 'assets/r1_year.png', 4, 'solved-year');">Initiate Recovery →</button>
     </div>
   </div>
 
@@ -201,7 +201,8 @@
     
     <div class="card split-layout">
       <div class="split-image" style="display: flex; flex-direction: column; align-items: center;">
-        <img src="assets/r1_year.png" id="img-year" class="puzzle-img" alt="Year Clue">
+        <p class="instruction-text">Click two tiles to swap them. Reconstruct the image.</p>
+        <div id="jigsaw-year" class="jigsaw-container"></div>
       </div>
       <div class="split-content">
         <h2>Puzzle 1: Identifying the Year</h2>
@@ -209,9 +210,10 @@
         <p>These events all point toward a single year.</p>
         <p style="font-weight: bold; margin-top: 1rem; color: var(--accent-gold);">Guess the year:</p>
         
-        <div class="form-group">
+        <div id="solved-year" class="jigsaw-solved form-group">
+          <p style="color: var(--success); font-weight: bold;">[ IMAGE RECONSTRUCTED ]</p>
           <input type="text" id="input-year" placeholder="Enter the year..." autocomplete="off">
-          <button onclick="checkAnswer('year', '2024', 'img-year', 'round1-month', 'Round 1: Month Challenge')">Restore Memory</button>
+          <button onclick="checkAnswer('year', '2024', null, 'round1-month', 'Round 1: Month Challenge', () => initJigsaw('jigsaw-month', 'assets/r1_month.png', 4, 'solved-month'))">Restore Memory</button>
           <div id="fb-year" class="feedback"></div>
         </div>
       </div>
@@ -226,16 +228,18 @@
     
     <div class="card split-layout">
       <div class="split-image" style="display: flex; flex-direction: column; align-items: center;">
-        <img src="assets/r1_month.png" id="img-month" class="puzzle-img" alt="Month Clue">
+        <p class="instruction-text">Click two tiles to swap them. Reconstruct the image.</p>
+        <div id="jigsaw-month" class="jigsaw-container"></div>
       </div>
       <div class="split-content">
         <h2>Puzzle 2: Identifying the Month</h2>
         <p>The memory stabilizes further and reveals another corrupted file. After assembling the second jigsaw puzzle, participants uncover three significant events that occur within the same month.</p>
         <p>Connect these clues to determine the month.</p>
         
-        <div class="form-group">
+        <div id="solved-month" class="jigsaw-solved form-group">
+          <p style="color: var(--success); font-weight: bold;">[ IMAGE RECONSTRUCTED ]</p>
           <input type="text" id="input-month" placeholder="Enter the month..." autocomplete="off">
-          <button onclick="checkAnswer('month', 'MAY', 'img-month', 'round2-date', 'Round 2: Date Challenge')">Restore Timeline</button>
+          <button onclick="checkAnswer('month', 'MAY', null, 'round2-date', 'Round 2: Date Challenge')">Restore Timeline</button>
           <div id="fb-month" class="feedback"></div>
         </div>
       </div>
