@@ -80,18 +80,8 @@
 </head>
 <body>
 
-  <!-- LOGIN SCREEN -->
-  <div id="login-screen" class="login-container">
-    <div class="login-card">
-      <h1 style="color:var(--teal);">⟁ GM AUTHENTICATION</h1>
-      <input type="password" id="gm-password" placeholder="Enter GM password..." autocomplete="off">
-      <button onclick="gmLogin()">↳ Access GM Portal</button>
-      <div id="gm-login-error" class="login-error"></div>
-    </div>
-  </div>
-
   <!-- DASHBOARD -->
-  <div id="gm-dashboard" style="display:none;">
+  <div id="gm-dashboard">
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
       <div>
         <h1>⟁ PROJECT REWIND — GM PORTAL</h1>
@@ -137,26 +127,7 @@
     STAGE_LABELS.push({ key: 'Round 2: Morse Code', short: 'R2:Mc' });
     STAGE_LABELS.push({ key: 'Victory!', short: 'Victory' });
 
-    let gmToken = sessionStorage.getItem('gm_token') || '';
     let pollInterval = null;
-
-    function gmLogin() {
-      const pw = document.getElementById('gm-password').value.trim();
-      if (!pw) return;
-      gmToken = pw;
-      sessionStorage.setItem('gm_token', pw);
-      fetchProgress().then(ok => {
-        if (ok) {
-          document.getElementById('login-screen').style.display = 'none';
-          document.getElementById('gm-dashboard').style.display = 'block';
-          pollInterval = setInterval(fetchProgress, 3000);
-        } else {
-          document.getElementById('gm-login-error').style.display = 'block';
-          document.getElementById('gm-login-error').textContent = 'Invalid GM password.';
-          sessionStorage.removeItem('gm_token');
-        }
-      });
-    }
 
     function stageCompleted(stages, key) {
       return stages.some(s => s.toLowerCase() === key.toLowerCase());
@@ -184,10 +155,7 @@
 
     async function fetchProgress() {
       try {
-        const res = await fetch('/api/progress', {
-          headers: { 'Authorization': 'Bearer ' + gmToken }
-        });
-        if (res.status === 401) return false;
+        const res = await fetch('/api/progress');
         const data = await res.json();
         const tbody = document.getElementById('table-body');
         const teams = Object.keys(data);
@@ -206,7 +174,7 @@
         if (teams.length === 0) {
           tbody.innerHTML = '<tr><td colspan="5" class="empty">No teams have logged in yet.</td></tr>';
           document.getElementById('last-refresh').textContent = 'Last refresh: ' + new Date().toLocaleTimeString();
-          return true;
+          return;
         }
 
         tbody.innerHTML = '';
@@ -265,10 +233,8 @@
           tbody.appendChild(tr);
         });
         document.getElementById('last-refresh').textContent = 'Last refresh: ' + new Date().toLocaleTimeString();
-        return true;
       } catch (e) {
         console.error('Failed to fetch progress', e);
-        return false;
       }
     }
 
@@ -276,7 +242,7 @@
       if (confirm('Reset all progress for team "' + teamName + '"? This cannot be undone.')) {
         fetch('/api/abort', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + gmToken },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ team: teamName })
         }).then(() => fetchProgress());
       }
@@ -287,23 +253,13 @@
       if (!confirm('Really? All teams will lose all progress.')) return;
       fetch('/api/abort', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + gmToken },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ team: '__ALL__' })
       }).then(() => fetchProgress());
     }
 
-    // Auto-login if token stored
-    if (gmToken) {
-      fetchProgress().then(ok => {
-        if (ok) {
-          document.getElementById('login-screen').style.display = 'none';
-          document.getElementById('gm-dashboard').style.display = 'block';
-          pollInterval = setInterval(fetchProgress, 3000);
-        } else {
-          sessionStorage.removeItem('gm_token');
-        }
-      });
-    }
+    pollInterval = setInterval(fetchProgress, 3000);
+    fetchProgress();
 
     window.addEventListener('beforeunload', function() {
       if (pollInterval) clearInterval(pollInterval);

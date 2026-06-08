@@ -9,7 +9,6 @@ from html import escape
 
 PORT = 8081
 DB_FILE = "progress_db.json"
-GM_PASSWORD = os.environ.get("GM_PASSWORD", "gm_rewind2024")
 
 progress_db = {}
 
@@ -33,11 +32,6 @@ load_db()
 
 def is_valid_team_name(name):
     return bool(name) and len(name) <= 50 and bool(re.match(r'^[a-zA-Z0-9 _-]+$', name))
-
-def parse_token(auth_header):
-    if not auth_header or not auth_header.startswith("Bearer "):
-        return None
-    return auth_header.split(" ", 1)[1]
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
@@ -122,14 +116,6 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"correct": match}).encode())
 
         elif self.path == '/api/abort':
-            token = parse_token(self.headers.get("Authorization", ""))
-            if token != GM_PASSWORD:
-                self.send_response(401)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": "Unauthorized"}).encode())
-                return
-
             team_name = data.get('team', '')
             if team_name == '__ALL__':
                 progress_db.clear()
@@ -146,14 +132,6 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == '/api/progress':
-            token = parse_token(self.headers.get("Authorization", ""))
-            if token != GM_PASSWORD:
-                self.send_response(401)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": "Unauthorized"}).encode())
-                return
-
             safe_db = {}
             for team, info in progress_db.items():
                 safe_db[escape(team)] = {
@@ -196,5 +174,4 @@ socketserver.TCPServer.allow_reuse_address = True
 
 with socketserver.TCPServer(("", PORT), CustomHandler) as httpd:
     print(f"Serving at port {PORT}")
-    print(f"GM password set via GM_PASSWORD env var" if os.environ.get("GM_PASSWORD") else f"Using default GM password (set GM_PASSWORD env var to override)")
     httpd.serve_forever()
