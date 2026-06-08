@@ -67,11 +67,23 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 self.wfile.write(json.dumps({"error": "Invalid team name. Use letters, numbers, spaces, hyphens, and underscores only."}).encode())
                 return
 
-            progress_db[team] = {
-                "current_stage": stage,
-                "last_updated": datetime.now().strftime("%H:%M:%S"),
-                "completed": completed,
-            }
+            entry = progress_db.get(team, {
+                "current_stage": "",
+                "last_updated": "",
+                "completed": False,
+                "completed_stages": [],
+            })
+
+            entry["current_stage"] = stage
+            entry["last_updated"] = datetime.now().strftime("%H:%M:%S")
+
+            if stage and stage not in entry["completed_stages"]:
+                entry["completed_stages"].append(stage)
+
+            if completed:
+                entry["completed"] = True
+
+            progress_db[team] = entry
             save_db()
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
@@ -119,8 +131,11 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 return
 
             team_name = data.get('team', '')
-            if team_name in progress_db:
-                progress_db[team_name]['aborted'] = True
+            if team_name == '__ALL__':
+                progress_db.clear()
+                save_db()
+            elif team_name in progress_db:
+                del progress_db[team_name]
                 save_db()
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
@@ -145,6 +160,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                     "current_stage": info.get("current_stage", ""),
                     "last_updated": info.get("last_updated", ""),
                     "completed": info.get("completed", False),
+                    "completed_stages": info.get("completed_stages", []),
                 }
 
             self.send_response(200)
