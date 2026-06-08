@@ -98,7 +98,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 'r2_5': '5',
                 'r2_6': '3',
                 'r2_7': '26',
-                'morse': '43.733334, 7.416667',
+                'morse': '43.7384, 7.4206',
             }
 
             correct = ANSWER_KEYS.get(puzzle)

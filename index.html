@@ -148,22 +148,214 @@
       letter-spacing: 1px;
     }
 
-    /* Morse code styles */
-    .morse-key {
-      font-family: monospace; font-size: 1.2rem; line-height: 2;
-      background: #000; padding: 1rem; border-radius: 6px; color: var(--accent-teal);
-      margin-top: 1rem; text-align: center; letter-spacing: 2px;
+    /* Phone UI styles for Coordinate Challenge */
+    .phone-wrapper {
+      max-width: 420px; margin: 0 auto;
     }
-    .morse-dict {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-      gap: 10px; font-family: monospace; margin-top: 2rem; font-size: 0.9rem;
+    .phone-bezel {
+      background: #1a1a2e; border-radius: 40px; padding: 12px;
+      box-shadow: 0 0 0 2px #333, 0 20px 60px rgba(0,0,0,0.8);
     }
-    .morse-item { background: rgba(255,255,255,0.05); padding: 5px; text-align: center; border-radius: 4px; }
-    
-    .morse-controls {
-      display: flex; flex-direction: column; gap: 1rem; align-items: center; margin: 2rem 0;
+    .phone-screen {
+      background: #fff; border-radius: 32px; overflow: hidden;
+      min-height: 580px; display: flex; flex-direction: column;
+      color: #222; position: relative;
     }
-    .slider-container { display: flex; align-items: center; gap: 10px; }
+    .phone-notch {
+      background: #1a1a2e; height: 28px; width: 40%; margin: 0 auto;
+      border-radius: 0 0 16px 16px; position: relative; z-index: 2;
+    }
+    .coord-bar {
+      background: #0a0d1a; color: #00d4b8; padding: 10px 16px;
+      font-family: 'Courier New', monospace; font-size: 0.85rem;
+      text-align: center; letter-spacing: 0.1em;
+    }
+    .coord-bar .filled { color: #20c997; }
+    .coord-bar .blank { color: #555; }
+    .coord-bar .label { color: #666; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; }
+    .phone-tabs {
+      display: flex; background: #f2f2f7; border-bottom: 1px solid #d1d1d6;
+      overflow-x: auto; flex-shrink: 0;
+    }
+    .phone-tab {
+      flex: 1; min-width: 0; padding: 8px 4px; text-align: center;
+      font-size: 0.6rem; color: #8e8e93; cursor: pointer; border: none;
+      background: transparent; font-weight: 500; transition: color 0.15s;
+      border-bottom: 2px solid transparent;
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+    }
+    .phone-tab .tab-icon { font-size: 1.1rem; }
+    .phone-tab.active { color: #007aff; border-bottom-color: #007aff; }
+    .phone-tab:hover { color: #007aff; }
+    .phone-content {
+      flex: 1; overflow-y: auto; padding: 12px 16px;
+      background: #f9f9fb; min-height: 300px;
+    }
+    .phone-content h3 {
+      font-size: 1rem; color: #1c1c1e; margin-bottom: 8px; font-weight: 600;
+    }
+    .phone-content p { font-size: 0.85rem; color: #3a3a3c; margin-bottom: 8px; line-height: 1.5; }
+    /* Gallery grid */
+    .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .photo-card {
+      background: #e8e8ed; border-radius: 8px; overflow: hidden;
+      cursor: pointer; transition: transform 0.15s;
+    }
+    .photo-card:hover { transform: scale(1.02); }
+    .photo-card .thumb {
+      width: 100%; aspect-ratio: 4/3;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; font-weight: bold;
+    }
+    .photo-card .caption {
+      padding: 4px 6px; background: #fff; font-size: 0.6rem;
+      font-family: 'Courier New', monospace; color: #555;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    /* Voice notes */
+    .note-list { display: flex; flex-direction: column; gap: 8px; }
+    .note-entry {
+      background: #fff; border-radius: 10px; padding: 10px 12px;
+      border: 1px solid #e5e5ea; cursor: pointer; transition: border-color 0.15s;
+    }
+    .note-entry:hover { border-color: #007aff; }
+    .note-entry .morse-beep {
+      font-family: 'Courier New', monospace; font-size: 0.9rem;
+      color: #007aff; margin-bottom: 4px;
+    }
+    .note-entry .note-text { font-size: 0.8rem; color: #555; }
+    /* Messages */
+    .msg-thread { display: flex; flex-direction: column; gap: 6px; }
+    .msg-bubble {
+      max-width: 80%; padding: 8px 12px; border-radius: 16px;
+      font-size: 0.85rem; line-height: 1.4;
+    }
+    .msg-bubble.sent {
+      align-self: flex-end; background: #007aff; color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .msg-bubble.received {
+      align-self: flex-start; background: #e5e5ea; color: #1c1c1e;
+      border-bottom-left-radius: 4px;
+    }
+    .msg-bubble .morse-msg {
+      font-family: 'Courier New', monospace; font-weight: bold;
+      letter-spacing: 0.15em;
+    }
+    .msg-time { font-size: 0.6rem; color: #8e8e93; margin: 2px 8px; }
+    /* Browser history */
+    .history-list { display: flex; flex-direction: column; gap: 6px; }
+    .history-item {
+      background: #fff; border-radius: 8px; padding: 8px 10px;
+      border: 1px solid #e5e5ea; display: flex; align-items: center; gap: 8px;
+    }
+    .history-item .icon { font-size: 1.2rem; }
+    .history-item .url { font-size: 0.7rem; color: #8e8e93; }
+    .history-item .title { font-size: 0.85rem; color: #1c1c1e; font-weight: 500; }
+    /* Maps */
+    .map-placeholder {
+      background: linear-gradient(135deg, #74b9ff, #0984e3);
+      border-radius: 12px; padding: 20px; text-align: center; color: #fff;
+      min-height: 160px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .map-placeholder .pin { font-size: 3rem; }
+    .map-placeholder .coord-display {
+      font-family: 'Courier New', monospace; font-size: 1.1rem;
+      background: rgba(0,0,0,0.3); padding: 6px 16px; border-radius: 6px;
+      margin-top: 8px;
+    }
+    .map-placeholder .coord-display .blank { color: #ffd166; background: rgba(255,209,102,0.2); padding: 0 4px; border-radius: 2px; }
+    .map-placeholder .coord-display .filled { color: #fff; }
+    /* Downloads */
+    .dl-list { display: flex; flex-direction: column; gap: 8px; }
+    .dl-item {
+      background: #fff; border-radius: 10px; padding: 10px 12px;
+      border: 1px solid #e5e5ea; cursor: pointer;
+    }
+    .dl-item:hover { border-color: #007aff; }
+    .dl-item .dl-title { font-size: 0.85rem; font-weight: 500; color: #1c1c1e; }
+    .dl-item .dl-sub { font-size: 0.7rem; color: #8e8e93; }
+    .dl-item .dl-hint { font-family: 'Courier New', monospace; font-size: 0.8rem; color: #007aff; margin-top: 4px; }
+    /* Morse reference */
+    .morse-ref-toggle {
+      position: fixed; bottom: 16px; right: 16px; z-index: 100;
+      background: #007aff; color: #fff; border: none; border-radius: 50%;
+      width: 44px; height: 44px; font-size: 1.2rem; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,122,255,0.3);
+    }
+    .morse-ref-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      z-index: 200; align-items: center; justify-content: center;
+    }
+    .morse-ref-overlay.open { display: flex; }
+    .morse-ref-card {
+      background: #1c1c1e; border-radius: 16px; padding: 20px;
+      max-width: 340px; width: 90%; max-height: 70vh; overflow-y: auto;
+    }
+    .morse-ref-card h3 { color: #fff; text-align: center; margin-bottom: 12px; }
+    .morse-ref-card .morse-dict {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+      font-family: 'Courier New', monospace; color: #fff;
+    }
+    .morse-ref-card .morse-item {
+      background: rgba(255,255,255,0.06); padding: 4px; text-align: center;
+      border-radius: 4px; font-size: 0.7rem;
+    }
+    .morse-ref-card .close-btn {
+      display: block; margin: 12px auto 0; padding: 6px 20px;
+      background: #007aff; color: #fff; border: none; border-radius: 6px;
+      font-size: 0.85rem; cursor: pointer;
+    }
+    /* Decode panel */
+    .decode-panel {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      z-index: 150; display: none; align-items: center; justify-content: center;
+    }
+    .decode-panel.open { display: flex; }
+    .decode-card {
+      background: #fff; border-radius: 16px; padding: 20px;
+      max-width: 340px; width: 90%;
+    }
+    .decode-card h3 { font-size: 1rem; margin-bottom: 8px; color: #1c1c1e; }
+    .decode-card .morse-display {
+      font-family: 'Courier New', monospace; font-size: 1.3rem;
+      text-align: center; padding: 12px; background: #f2f2f7; border-radius: 8px;
+      margin: 8px 0; letter-spacing: 0.2em;
+    }
+    .decode-card input {
+      width: 100%; padding: 10px; border: 2px solid #e5e5ea; border-radius: 8px;
+      font-size: 1.1rem; text-align: center; outline: none; margin: 8px 0;
+    }
+    .decode-card input:focus { border-color: #007aff; }
+    .decode-card input.correct { border-color: #20c997; background: rgba(32,201,151,0.05); }
+    .decode-card .decode-feedback { font-size: 0.85rem; text-align: center; margin-top: 4px; min-height: 1.4em; }
+    .decode-card .decode-feedback.success { color: #20c997; }
+    .decode-card .decode-feedback.error { color: #ff3b5c; }
+    .decode-card .decode-btn {
+      width: 100%; padding: 10px; background: #007aff; color: #fff;
+      border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer;
+    }
+    .decode-card .decode-btn:disabled { opacity: 0.5; }
+    .progress-tracker {
+      display: flex; justify-content: center; gap: 8px; padding: 8px 0;
+    }
+    .prog-dot {
+      width: 24px; height: 24px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 0.65rem; font-weight: bold;
+      background: #e5e5ea; color: #8e8e93;
+    }
+    .prog-dot.found { background: #20c997; color: #fff; }
+    .phone-footer {
+      padding: 8px 16px; text-align: center; font-size: 0.6rem; color: #8e8e93;
+      background: #f2f2f7; border-top: 1px solid #d1d1d6;
+    }
+    .coordinate-final-btn {
+      width: 100%; padding: 12px; background: #20c997; color: #fff;
+      border: none; border-radius: 10px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; margin-top: 12px;
+    }
+    .coordinate-final-btn:disabled { background: #b8b8b8; cursor: default; }
 
   </style>
 </head>
@@ -269,49 +461,258 @@
     </div>
   </div>
 
-  <!-- ROUND 2: MORSE CODE -->
+  <!-- ROUND 2: COORDINATE CHALLENGE (Phone UI) -->
   <div id="view-round2-morse" class="view">
-    <div style="text-align: center; margin-bottom: 2rem;">
-      <h1 style="color: var(--accent-red);">ROUND 2: DATE AND MORSE CODE</h1>
+    <div style="text-align: center; margin-bottom: 1.5rem;">
+      <h1 style="color: var(--accent-red); font-size: 1.6rem;">COORDINATE CHALLENGE</h1>
+      <p style="font-size: 0.9rem;">Sam's recovered phone contains clues to his location. Explore each app to find the missing digits.</p>
     </div>
-    
-    <div class="card">
-      <h2 style="color: var(--accent-teal);">Final Memory Node: The Coordinates</h2>
-      <p>The date has been locked in. The system is transmitting a final audio signal to locate Sam. It sounds like Morse code.</p>
-      
-      <div class="morse-controls">
-        <div class="slider-container">
-          <label for="morse-speed">Playback Speed:</label>
-          <input type="range" id="morse-speed" min="0.5" max="2" step="0.1" value="1">
-          <span id="speed-val" style="font-family: monospace; color: var(--accent-gold);">1.0x</span>
-        </div>
-        
-        <div style="display: flex; gap: 1rem;">
-          <button class="btn-red" id="btn-play-morse" onclick="playMorse()">▶ PLAY SIGNAL</button>
-          <button style="background: var(--text-secondary);" onclick="stopMorse()">⏹ STOP</button>
+
+    <div class="phone-wrapper">
+      <div class="phone-bezel">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+
+          <!-- Coordinate bar -->
+          <div class="coord-bar">
+            <div class="label">Coordinates</div>
+            <div>
+              <span id="coord-lat-display">43.<span class="blank" id="clat1">_</span><span class="blank" id="clat2">_</span>84</span>
+              <span style="margin:0 8px;color:#555">|</span>
+              <span id="coord-lon-display">7.4<span class="blank" id="clon1">_</span><span class="blank" id="clon2">_</span>6</span>
+            </div>
+          </div>
+
+          <!-- Progress tracker -->
+          <div class="progress-tracker">
+            <span class="prog-dot" id="prog-gallery">G</span>
+            <span class="prog-dot" id="prog-notes">N</span>
+            <span class="prog-dot" id="prog-msg">M</span>
+            <span class="prog-dot" id="prog-dl">D</span>
+          </div>
+
+          <!-- Tabs -->
+          <div class="phone-tabs">
+            <button class="phone-tab active" data-tab="gallery" onclick="switchPhoneTab('gallery')"><span class="tab-icon">🖼</span> Gallery</button>
+            <button class="phone-tab" data-tab="notes" onclick="switchPhoneTab('notes')"><span class="tab-icon">🎤</span> Notes</button>
+            <button class="phone-tab" data-tab="messages" onclick="switchPhoneTab('messages')"><span class="tab-icon">💬</span> Messages</button>
+            <button class="phone-tab" data-tab="browser" onclick="switchPhoneTab('browser')"><span class="tab-icon">🌐</span> Browser</button>
+            <button class="phone-tab" data-tab="maps" onclick="switchPhoneTab('maps')"><span class="tab-icon">🗺</span> Maps</button>
+            <button class="phone-tab" data-tab="downloads" onclick="switchPhoneTab('downloads')"><span class="tab-icon">⬇</span> Downloads</button>
+          </div>
+
+          <!-- Tab content -->
+          <div class="phone-content">
+            <!-- GALLERY -->
+            <div class="tab-panel" id="tab-gallery">
+              <h3>📸 Gallery</h3>
+              <p>Sam's photos contain clues in their filenames. Each filename has a Morse code pattern — decode it to find a digit.</p>
+              <div class="photo-grid">
+                <div class="photo-card" onclick="openDecode('gallery', '--...', 7)">
+                  <div class="thumb" style="background:linear-gradient(135deg,#74b9ff,#0984e3);color:#fff;">🏎</div>
+                  <div class="caption">IMG_<strong>--...</strong>.jpg</div>
+                </div>
+                <div class="photo-card" onclick="openDecode('gallery', '....-', 4)">
+                  <div class="thumb" style="background:linear-gradient(135deg,#fdcb6e,#e17055);color:#fff;">⛵</div>
+                  <div class="caption">IMG_<strong>....-</strong>.jpg</div>
+                </div>
+                <div class="photo-card">
+                  <div class="thumb" style="background:linear-gradient(135deg,#a29bfe,#6c5ce7);color:#fff;">🎰</div>
+                  <div class="caption">IMG_20240526_1423.jpg</div>
+                </div>
+                <div class="photo-card">
+                  <div class="thumb" style="background:linear-gradient(135deg,#55efc4,#00b894);color:#fff;">🏖</div>
+                  <div class="caption">IMG_20240525_0912.jpg</div>
+                </div>
+              </div>
+              <p style="font-size:0.75rem;color:#8e8e93;margin-top:8px;">Tip: use the Morse code reference (🔤 button bottom-right) to decode the patterns.</p>
+            </div>
+
+            <!-- VOICE NOTES -->
+            <div class="tab-panel" id="tab-notes" style="display:none;">
+              <h3>🎤 Voice Notes</h3>
+              <p>Sam left voice recordings. Each shows its Morse beep pattern — decode to find a digit.</p>
+              <div class="note-list">
+                <div class="note-entry" onclick="openDecode('notes', '...--', 3)">
+                  <div class="morse-beep">· · · − − −</div>
+                  <div class="note-text">"Checking into the hotel near the port. Great view of the harbor."</div>
+                </div>
+                <div class="note-entry">
+                  <div class="morse-beep">· − − − −</div>
+                  <div class="note-text">"Practice lap was incredible. The tunnel section is insane."</div>
+                </div>
+                <div class="note-entry">
+                  <div class="morse-beep">− − − − −</div>
+                  <div class="note-text">"Dinner at the casino terrace. Meeting the team tomorrow."</div>
+                </div>
+                <div class="note-entry">
+                  <div class="morse-beep">· − − − −</div>
+                  <div class="note-text">"Watching the boats from the marina. This place is unreal."</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- MESSAGES -->
+            <div class="tab-panel" id="tab-messages" style="display:none;">
+              <h3>💬 Messages</h3>
+              <p>Sam's conversation with a friend. Some messages contain hidden Morse code.</p>
+              <div class="msg-thread">
+                <div class="msg-bubble received"><strong>Sam:</strong> Made it to Monaco! The harbor is packed with yachts.</div>
+                <div class="msg-time">10:42 AM</div>
+                <div class="msg-bubble sent"><strong>You:</strong> Awesome! Are you going to the race?</div>
+                <div class="msg-time">10:43 AM</div>
+                <div class="msg-bubble received"><strong>Sam:</strong> Already scoped out the best viewing spot at turn 1.</div>
+                <div class="msg-time">10:45 AM</div>
+                <div class="msg-bubble sent"><strong>You:</strong> Send me your location so I can track you on the map</div>
+                <div class="msg-time">10:46 AM</div>
+                <div class="msg-bubble received"><strong>Sam:</strong> Wait, what is <span class="morse-msg">..---</span>? I keep seeing these symbols. Someone said it's the key number.</div>
+                <div class="msg-time">10:48 AM</div>
+                <div class="msg-bubble received" style="cursor:pointer;" onclick="openDecode('messages', '..---', 2)">
+                  <strong>Sam:</strong> Also saw this one: <span class="morse-msg">..---</span> — my friend says decode it!
+                  <div style="font-size:0.7rem;color:#007aff;margin-top:4px;">Tap to decode →</div>
+                </div>
+                <div class="msg-time">10:49 AM</div>
+                <div class="msg-bubble received"><strong>Sam:</strong> Anyway, meet me near the marina tonight. I'll be by the big yachts.</div>
+                <div class="msg-time">10:52 AM</div>
+              </div>
+            </div>
+
+            <!-- BROWSER HISTORY -->
+            <div class="tab-panel" id="tab-browser" style="display:none;">
+              <h3>🌐 Browser History</h3>
+              <p>Sam's recent searches confirm what we already know.</p>
+              <div class="history-list">
+                <div class="history-item">
+                  <div class="icon">🔍</div>
+                  <div>
+                    <div class="title">Grand Prix street circuit schedule 2024</div>
+                    <div class="url">google.com/search?q=monaco+gp+schedule</div>
+                  </div>
+                </div>
+                <div class="history-item">
+                  <div class="icon">🔍</div>
+                  <div>
+                    <div class="title">Best harbor view restaurants Monaco</div>
+                    <div class="url">google.com/search?q=harbor+view+monaco</div>
+                  </div>
+                </div>
+                <div class="history-item">
+                  <div class="icon">🔍</div>
+                  <div>
+                    <div class="title">Casino district attractions Monte Carlo</div>
+                    <div class="url">google.com/search?q=casino+monte+carlo</div>
+                  </div>
+                </div>
+              </div>
+              <p style="margin-top:12px;color:#20c997;font-weight:500;">✓ Destination confirmed: Monaco — no digit needed here.</p>
+            </div>
+
+            <!-- MAPS -->
+            <div class="tab-panel" id="tab-maps" style="display:none;">
+              <h3>🗺 Maps</h3>
+              <p>A pin has been dropped on the French Riviera. Fill in all digits to reveal the exact location.</p>
+              <div class="map-placeholder">
+                <div class="pin">📍</div>
+                <div style="font-size:1.2rem;font-weight:600;margin-top:8px;">Monaco, French Riviera</div>
+                <div class="coord-display">
+                  <span id="map-lat">43.<span class="blank" id="mlat1">_</span><span class="blank" id="mlat2">_</span>84</span>
+                  <span style="margin:0 6px">,</span>
+                  <span id="map-lon">7.4<span class="blank" id="mlon1">_</span><span class="blank" id="mlon2">_</span>6</span>
+                </div>
+              </div>
+              <button class="coordinate-final-btn" id="verify-coord-btn" onclick="checkAllCoords()" disabled>
+                Find Sam
+              </button>
+              <div id="fb-coord-final" style="text-align:center;margin-top:8px;font-size:0.85rem;"></div>
+            </div>
+
+            <!-- DOWNLOADS -->
+            <div class="tab-panel" id="tab-downloads" style="display:none;">
+              <h3>⬇ Downloads</h3>
+              <p>Sam downloaded these before he disappeared. The numbers might mean something.</p>
+              <div class="dl-list">
+                <div class="dl-item" onclick="openDecode('downloads', '-----', 0)">
+                  <div class="dl-title">Receipt #083764</div>
+                  <div class="dl-sub">Café de Paris — May 25, 2024</div>
+                  <div class="dl-hint">🔍 Look closely at the receipt number for hidden Morse</div>
+                </div>
+                <div class="dl-item">
+                  <div class="dl-title">VIP Event Pass</div>
+                  <div class="dl-sub">Monaco Grand Prix — May 24–26</div>
+                  <div class="dl-hint">This confirms the event. No digit here.</div>
+                </div>
+                <div class="dl-item">
+                  <div class="dl-title">Hotel Booking Confirmation</div>
+                  <div class="dl-sub">Port Hercule Marina — Check-in May 23</div>
+                  <div class="dl-hint">No digit — but confirms Sam was at the port.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="phone-footer">Sam's Phone • Last seen May 26, 2024</div>
         </div>
       </div>
+    </div>
 
-      <div class="form-group" style="max-width: 400px; margin: 0 auto;">
-        <input type="text" id="input-morse" placeholder="Enter Coordinates (e.g. 12.345, 67.890)" autocomplete="off">
-        <button onclick="checkMorse()">Verify Coordinates</button>
-        <div id="fb-morse" class="feedback"></div>
+    <!-- Morse Reference Toggle -->
+    <button class="morse-ref-toggle" onclick="toggleMorseRef()" title="Morse Code Reference">🔤</button>
+
+    <!-- Morse Reference Overlay -->
+    <div class="morse-ref-overlay" id="morse-ref-overlay">
+      <div class="morse-ref-card">
+        <h3>Morse Code Reference</h3>
+        <div class="morse-dict">
+          <div class="morse-item">0<br>-----</div>
+          <div class="morse-item">1<br>.----</div>
+          <div class="morse-item">2<br>..---</div>
+          <div class="morse-item">3<br>...--</div>
+          <div class="morse-item">4<br>....-</div>
+          <div class="morse-item">5<br>.....</div>
+          <div class="morse-item">6<br>-....</div>
+          <div class="morse-item">7<br>--...</div>
+          <div class="morse-item">8<br>---..</div>
+          <div class="morse-item">9<br>----.</div>
+          <div class="morse-item">A<br>.-</div>
+          <div class="morse-item">B<br>-...</div>
+          <div class="morse-item">C<br>-.-.</div>
+          <div class="morse-item">D<br>-..</div>
+          <div class="morse-item">E<br>.</div>
+          <div class="morse-item">F<br>..-.</div>
+          <div class="morse-item">G<br>--.</div>
+          <div class="morse-item">H<br>....</div>
+          <div class="morse-item">I<br>..</div>
+          <div class="morse-item">J<br>.---</div>
+          <div class="morse-item">K<br>-.-</div>
+          <div class="morse-item">L<br>.-..</div>
+          <div class="morse-item">M<br>--</div>
+          <div class="morse-item">N<br>-.</div>
+          <div class="morse-item">O<br>---</div>
+          <div class="morse-item">P<br>.--.</div>
+          <div class="morse-item">Q<br>--.-</div>
+          <div class="morse-item">R<br>.-.</div>
+          <div class="morse-item">S<br>...</div>
+          <div class="morse-item">T<br>-</div>
+          <div class="morse-item">U<br>..-</div>
+          <div class="morse-item">V<br>...-</div>
+          <div class="morse-item">W<br>.--</div>
+          <div class="morse-item">X<br>-..-</div>
+          <div class="morse-item">Y<br>-.--</div>
+          <div class="morse-item">Z<br>--..</div>
+        </div>
+        <button class="close-btn" onclick="toggleMorseRef()">Close</button>
       </div>
+    </div>
 
-      <h3 style="margin-top: 3rem; text-align: center;">Morse Code Key</h3>
-      <div class="morse-dict">
-        <div class="morse-item">0<br>-----</div>
-        <div class="morse-item">1<br>.----</div>
-        <div class="morse-item">2<br>..---</div>
-        <div class="morse-item">3<br>...--</div>
-        <div class="morse-item">4<br>....-</div>
-        <div class="morse-item">5<br>.....</div>
-        <div class="morse-item">6<br>-....</div>
-        <div class="morse-item">7<br>--...</div>
-        <div class="morse-item">8<br>---..</div>
-        <div class="morse-item">9<br>----.</div>
-        <div class="morse-item">.<br>.-.-.-</div>
-        <div class="morse-item">,<br>--..--</div>
+    <!-- Decode Panel (modal) -->
+    <div class="decode-panel" id="decode-panel">
+      <div class="decode-card">
+        <h3 id="decode-title">Decode the Morse</h3>
+        <div class="morse-display" id="decode-morse">− − − − −</div>
+        <input type="text" id="decode-input" placeholder="Enter the digit..." maxlength="1" autocomplete="off">
+        <div class="decode-feedback" id="decode-feedback"></div>
+        <button class="decode-btn" id="decode-submit" onclick="submitDecode()">Submit</button>
+        <button style="width:100%;padding:8px;background:transparent;color:#8e8e93;border:none;font-size:0.85rem;cursor:pointer;margin-top:6px;" onclick="closeDecode()">Cancel</button>
       </div>
     </div>
   </div>
@@ -544,106 +945,166 @@
     }
     renderR2(); // init
 
-    // Round 2: Morse Code Logic
-    // The coordinates are needed client-side to generate the audio signal
-    const morseTarget = "43.733334, 7.416667";
-    const morseDict = {
-      '0':'-----', '1':'.----', '2':'..---', '3':'...--', '4':'....-', '5':'.....',
-      '6':'-....', '7':'--...', '8':'---..', '9':'----.', '.':'.-.-.-', ',':'--..--', ' ':'/'
+    // Coordinate Challenge — Phone App Logic
+    const DIGIT_MAP = {
+      'gallery': 7, 'notes': 3, 'messages': 2, 'downloads': 0,
     };
-    
-    let isPlaying = false;
-    let audioCtx = null;
-    let osc = null;
-    let gain = null;
-    let playTimeout = null;
+    const DIGIT_LABELS = { 'gallery': 'Gallery', 'notes': 'Voice Notes', 'messages': 'Messages', 'downloads': 'Downloads' };
+    const DIGIT_COORD = {
+      'gallery': { type: 'lat', pos: 1 },
+      'notes': { type: 'lat', pos: 2 },
+      'messages': { type: 'lon', pos: 1 },
+      'downloads': { type: 'lon', pos: 2 },
+    };
 
-    document.getElementById('morse-speed').addEventListener('input', e => {
-      document.getElementById('speed-val').innerText = parseFloat(e.target.value).toFixed(1) + 'x';
+    let foundDigits = {};
+    let currentDecodeSource = null;
+    let currentDecodeExpected = null;
+
+    // Update the coordinate display
+    function updateCoords() {
+      const find = (type, pos) => {
+        for (const [src, info] of Object.entries(DIGIT_COORD)) {
+          if (info.type === type && info.pos === pos && foundDigits[src] !== undefined) {
+            return foundDigits[src];
+          }
+        }
+        return null;
+      };
+
+      const lat1 = find('lat', 1);
+      const lat2 = find('lat', 2);
+      const lon1 = find('lon', 1);
+      const lon2 = find('lon', 2);
+
+      document.getElementById('clat1').textContent = lat1 !== null ? lat1 : '_';
+      document.getElementById('clat1').className = lat1 !== null ? 'filled' : 'blank';
+      document.getElementById('clat2').textContent = lat2 !== null ? lat2 : '_';
+      document.getElementById('clat2').className = lat2 !== null ? 'filled' : 'blank';
+      document.getElementById('clon1').textContent = lon1 !== null ? lon1 : '_';
+      document.getElementById('clon1').className = lon1 !== null ? 'filled' : 'blank';
+      document.getElementById('clon2').textContent = lon2 !== null ? lon2 : '_';
+      document.getElementById('clon2').className = lon2 !== null ? 'filled' : 'blank';
+
+      // Update maps display
+      document.getElementById('mlat1').textContent = lat1 !== null ? lat1 : '_';
+      document.getElementById('mlat1').className = lat1 !== null ? 'filled' : 'blank';
+      document.getElementById('mlat2').textContent = lat2 !== null ? lat2 : '_';
+      document.getElementById('mlat2').className = lat2 !== null ? 'filled' : 'blank';
+      document.getElementById('mlon1').textContent = lon1 !== null ? lon1 : '_';
+      document.getElementById('mlon1').className = lon1 !== null ? 'filled' : 'blank';
+      document.getElementById('mlon2').textContent = lon2 !== null ? lon2 : '_';
+      document.getElementById('mlon2').className = lon2 !== null ? 'filled' : 'blank';
+
+      // Enable final button if all 4 found
+      const allFound = Object.keys(DIGIT_MAP).every(k => foundDigits[k] !== undefined);
+      document.getElementById('verify-coord-btn').disabled = !allFound;
+    }
+
+    // Tab switching
+    function switchPhoneTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(el => el.style.display = 'none');
+      document.getElementById('tab-' + tabId).style.display = 'block';
+      document.querySelectorAll('.phone-tab').forEach(el => el.classList.remove('active'));
+      document.querySelector('.phone-tab[data-tab="' + tabId + '"]').classList.add('active');
+    }
+
+    // Morse reference overlay
+    function toggleMorseRef() {
+      document.getElementById('morse-ref-overlay').classList.toggle('open');
+    }
+    document.getElementById('morse-ref-overlay').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) toggleMorseRef();
     });
 
-    function stopMorse() {
-      if (osc) {
-        try { osc.stop(); } catch(e) {}
-        osc = null;
+    // Decode panel
+    function openDecode(source, morsePattern, expectedDigit) {
+      currentDecodeSource = source;
+      currentDecodeExpected = expectedDigit;
+      const label = DIGIT_LABELS[source] || source;
+      document.getElementById('decode-title').textContent = 'Clue from ' + label;
+      document.getElementById('decode-morse').textContent = morsePattern;
+      document.getElementById('decode-input').value = '';
+      document.getElementById('decode-input').className = '';
+      document.getElementById('decode-feedback').textContent = '';
+      document.getElementById('decode-feedback').className = 'decode-feedback';
+      document.getElementById('decode-submit').disabled = false;
+      document.getElementById('decode-panel').classList.add('open');
+      setTimeout(() => document.getElementById('decode-input').focus(), 100);
+    }
+
+    function closeDecode() {
+      document.getElementById('decode-panel').classList.remove('open');
+      currentDecodeSource = null;
+      currentDecodeExpected = null;
+    }
+
+    function submitDecode() {
+      const val = document.getElementById('decode-input').value.trim();
+      const fb = document.getElementById('decode-feedback');
+      const input = document.getElementById('decode-input');
+
+      if (!val) return;
+
+      if (parseInt(val) === currentDecodeExpected) {
+        fb.textContent = '✓ Correct! Digit ' + currentDecodeExpected + ' found!';
+        fb.className = 'decode-feedback success';
+        input.className = 'correct';
+        document.getElementById('decode-submit').disabled = true;
+
+        foundDigits[currentDecodeSource] = currentDecodeExpected;
+        document.getElementById('prog-' + currentDecodeSource).classList.add('found');
+        document.getElementById('prog-' + currentDecodeSource).textContent = '✓';
+        updateCoords();
+
+        setTimeout(closeDecode, 800);
+      } else {
+        fb.textContent = '✗ Incorrect. Try again.';
+        fb.className = 'decode-feedback error';
+        input.value = '';
+        input.focus();
       }
-      if (playTimeout) clearTimeout(playTimeout);
-      isPlaying = false;
-      document.getElementById('btn-play-morse').innerText = "▶ PLAY SIGNAL";
     }
 
-    function playMorse() {
-      if (isPlaying) { stopMorse(); return; } // Toggle off if playing
-      isPlaying = true;
-      document.getElementById('btn-play-morse').innerText = "⏸ RESTART SIGNAL";
-      
-      const speed = parseFloat(document.getElementById('morse-speed').value);
-      const dotTime = 0.15 / speed; // Base dot is 150ms
+    // Allow Enter key in decode input
+    document.getElementById('decode-input').addEventListener('keypress', e => {
+      if (e.key === 'Enter') submitDecode();
+    });
 
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      audioCtx = new AudioContext();
-      osc = audioCtx.createOscillator();
-      gain = audioCtx.createGain();
-      
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(600, audioCtx.currentTime); // 600Hz tone
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      gain.gain.value = 0;
-      osc.start();
+    // Final coordinate verification
+    async function checkAllCoords() {
+      const allFound = Object.keys(DIGIT_MAP).every(k => foundDigits[k] !== undefined);
+      if (!allFound) return;
 
-      const sequence = morseTarget.split('').map(c => morseDict[c] || '').join(' ').split('');
-      let time = audioCtx.currentTime + 0.1;
-
-      sequence.forEach(char => {
-        if (char === '.') {
-          gain.gain.setValueAtTime(1, time);
-          time += dotTime;
-          gain.gain.setValueAtTime(0, time);
-          time += dotTime;
-        } else if (char === '-') {
-          gain.gain.setValueAtTime(1, time);
-          time += dotTime * 3;
-          gain.gain.setValueAtTime(0, time);
-          time += dotTime;
-        } else if (char === ' ') {
-          time += dotTime * 3; // Space between characters
-        } else if (char === '/') {
-          time += dotTime * 7; // Space between words
-        }
-      });
-
-      playTimeout = setTimeout(() => {
-        stopMorse();
-      }, (time - audioCtx.currentTime) * 1000);
-    }
-
-    async function checkMorse() {
-      const val = document.getElementById('input-morse').value.trim();
-      const fb = document.getElementById('fb-morse');
+      const fb = document.getElementById('fb-coord-final');
+      const answer = '43.7384, 7.4206';
       try {
         const res = await fetch('/api/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ puzzle: 'morse', answer: val })
+          body: JSON.stringify({ puzzle: 'morse', answer: answer })
         });
         const data = await res.json();
         if (data.correct) {
-          fb.innerText = "Coordinates Verified!";
-          fb.className = "feedback success";
+          fb.textContent = '✓ Coordinates Verified!';
+          fb.style.color = '#20c997';
           setTimeout(() => {
             nav('victory');
             reportProgress('Victory!', true);
           }, 1500);
         } else {
-          fb.innerText = "Signal invalid. Recalculate coordinates.";
-          fb.className = "feedback error";
+          fb.textContent = 'Server error. Please try again.';
+          fb.style.color = '#ff3b5c';
         }
       } catch (e) {
-        fb.innerText = "Server error. Please try again.";
-        fb.className = "feedback error";
+        fb.textContent = 'Server error. Please try again.';
+        fb.style.color = '#ff3b5c';
       }
     }
+
+    // Init first tab
+    switchPhoneTab('gallery');
+    updateCoords();
   </script>
 </body>
 </html>
