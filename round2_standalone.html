@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Rewind - The Date Challenge</title>
+  <style>
+    :root {
+      --bg-color: #0a0d1a;
+      --bg-card: #13172c;
+      --text-primary: #f0f2f5;
+      --text-secondary: #9aa0a6;
+      --accent-teal: #00d4b8;
+      --accent-gold: #ffd166;
+      --accent-red: #ff3b5c;
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --success: #20c997;
+      --error: #ff4d4f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .tag {
+      color: var(--accent-red);
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      font-family: monospace;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .desc {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    /* Progress Dots */
+    .progress-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 2rem;
+    }
+    .dot {
+      width: 30px;
+      height: 6px;
+      background: var(--border-subtle);
+      border-radius: 3px;
+      transition: all 0.3s;
+    }
+    .dot.completed { background: var(--success); }
+    .dot.active { background: var(--accent-teal); box-shadow: 0 0 10px var(--accent-teal); }
+
+    /* Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width: 768px) {
+      .card { flex-direction: row; }
+    }
+
+    .image-pane {
+      flex: 1;
+      background: #000;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    @media (min-width: 768px) {
+      .image-pane { border-bottom: none; border-right: 1px solid var(--border-subtle); }
+    }
+
+    .image-pane img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      max-height: 400px;
+    }
+
+    .content-pane {
+      flex: 1;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    h2 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+
+    .riddle {
+      font-family: monospace;
+      color: var(--accent-gold);
+      background: rgba(255,209,102,0.05);
+      border-left: 4px solid var(--accent-gold);
+      padding: 1rem;
+      margin-bottom: 2rem;
+      white-space: pre-line;
+      font-size: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    input[type="text"] {
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(0,0,0,0.2);
+      color: white;
+      font-size: 1rem;
+      outline: none;
+    }
+    input[type="text"]:focus {
+      border-color: var(--accent-teal);
+    }
+
+    button {
+      padding: 0.8rem 1rem;
+      background: var(--accent-teal);
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    button:hover { opacity: 0.9; }
+
+    .feedback {
+      margin-top: 1rem;
+      padding: 0.8rem;
+      border-radius: 6px;
+      display: none;
+      font-weight: bold;
+    }
+    .feedback.success { background: rgba(32,201,151,0.2); color: var(--success); display: block; }
+    .feedback.error { background: rgba(255,77,79,0.2); color: var(--error); display: block; }
+
+    #victory { display: none; text-align: center; padding: 4rem; }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="game-container">
+    <div class="header">
+      <div class="tag">THE DATE CHALLENGE</div>
+      <h1>Hidden in Plain Sight</h1>
+      <p class="desc">Appearances deceive. Hidden within each image lies a number. Only careful observation will reveal it.</p>
+    </div>
+
+    <div class="progress-row" id="progress">
+      <!-- Dots injected via JS -->
+    </div>
+
+    <div class="card">
+      <div class="image-pane" id="image-container">
+        <img id="puzzle-img" src="" alt="Puzzle Image" onerror="this.style.display='none'">
+      </div>
+      <div class="content-pane">
+        <h2 id="puzzle-title">Title</h2>
+        <div class="riddle" id="puzzle-riddle">Riddle goes here...</div>
+        
+        <div class="form-group">
+          <input type="text" id="answer-input" placeholder="Enter the hidden number..." autocomplete="off">
+          <button id="submit-btn">Submit</button>
+          <div id="feedback" class="feedback"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" id="victory">
+    <h1 style="color: var(--accent-teal); font-size: 4rem; margin-bottom: 1rem;">🔓 UNLOCKED</h1>
+    <p style="font-size: 1.5rem; color: var(--text-secondary);">You successfully solved the Date Challenge!</p>
+    <p style="margin-top: 2rem; font-family: monospace;">Target Date: <strong style="color:white; font-size: 2rem;">26</strong></p>
+  </div>
+
+  <script>
+    const PUZZLES = [
+      {
+        id: 1,
+        title: 'Puzzle 1: The Storm',
+        riddle: "The clouds have not yet spoken.\nTheir message lies in the waiting.\nMeasure the distance between now and the storm,\nAnd the hidden key will reveal itself.",
+        image: "frontend/public/assets/images/r2_1_weather.jpg",
+        answer: "6"
+      },
+      {
+        id: 2,
+        title: 'Puzzle 2: The Gathering',
+        riddle: "Five papers lie before you.\nFour speak of journeys, payments, and farewells.\nOne remembers a gathering.\nFind where the guests were meant to meet,\nAnd the hidden key will reveal itself.",
+        image: "frontend/public/assets/images/r2_2_receipt.jpg",
+        answer: "8"
+      },
+      {
+        id: 3,
+        title: 'Puzzle 3: The Tale',
+        riddle: "Do not measure the achievement.\nMeasure the way it is remembered.\nThe key lies not in the quantity,\nBut in the characters that tell its tale.",
+        image: "frontend/public/assets/images/r2_3_post.jpg",
+        answer: "3"
+      },
+      {
+        id: 4,
+        title: 'Puzzle 4: The Champion',
+        riddle: "One number describes the plan.\nOne number marks what is yet to come.\nOne number celebrates a completed task.\nSeek the champion, and the key is yours.",
+        image: "frontend/public/assets/images/r2_4_calendar.jpg",
+        answer: "5"
+      },
+      {
+        id: 5,
+        title: 'Puzzle 5: The Span',
+        riddle: "A circle marks the chosen path.\nThree records remain untouched.\nSeek the furthest whisper in time.\nThe key is found not at the destination,\nBut in the span that separates certainty from fate.",
+        image: "frontend/public/assets/images/r2_5_whatsapp.jpg",
+        answer: "5"
+      },
+      {
+        id: 6,
+        title: 'Puzzle 6: The Room',
+        riddle: "One date unlocks the room,\nAnother turns the final key.\nCount only the darkness in between,\nAnd the hidden number will reveal itself.",
+        image: "frontend/public/assets/images/r2_6_hotel.jpg",
+        answer: "3"
+      },
+      {
+        id: 7,
+        title: 'Final Equation',
+        riddle: "The numbers don't tell everything but equations do.\n\nTarget Date = (Hotel × Weather) + Receipt + (Calendar - WhatsApp) × Post",
+        image: null,
+        answer: "26"
+      }
+    ];
+
+    let currentSlide = 0;
+
+    const els = {
+      progress: document.getElementById('progress'),
+      img: document.getElementById('puzzle-img'),
+      title: document.getElementById('puzzle-title'),
+      riddle: document.getElementById('puzzle-riddle'),
+      input: document.getElementById('answer-input'),
+      btn: document.getElementById('submit-btn'),
+      feedback: document.getElementById('feedback'),
+      game: document.getElementById('game-container'),
+      victory: document.getElementById('victory'),
+      imgContainer: document.getElementById('image-container')
+    };
+
+    function renderSlide() {
+      const p = PUZZLES[currentSlide];
+      els.title.innerText = p.title;
+      els.riddle.innerText = p.riddle;
+      els.input.value = '';
+      els.feedback.className = 'feedback';
+      
+      if (p.image) {
+        els.img.src = p.image;
+        els.img.style.display = 'block';
+        els.imgContainer.style.display = 'block';
+      } else {
+        els.img.style.display = 'none';
+        els.imgContainer.style.display = 'none';
+      }
+
+      els.progress.innerHTML = PUZZLES.map((_, i) => 
+        `<div class="dot ${i === currentSlide ? 'active' : ''} ${i < currentSlide ? 'completed' : ''}"></div>`
+      ).join('');
+      
+      els.input.focus();
+    }
+
+    function checkAnswer() {
+      const val = els.input.value.trim().toUpperCase();
+      const correct = PUZZLES[currentSlide].answer.toUpperCase();
+
+      if (val === correct) {
+        els.feedback.innerText = "Correct!";
+        els.feedback.className = "feedback success";
+        setTimeout(() => {
+          if (currentSlide < PUZZLES.length - 1) {
+            currentSlide++;
+            renderSlide();
+          } else {
+            els.game.style.display = 'none';
+            els.victory.style.display = 'block';
+          }
+        }, 800);
+      } else {
+        els.feedback.innerText = "Incorrect answer. Try again!";
+        els.feedback.className = "feedback error";
+      }
+    }
+
+    els.btn.addEventListener('click', checkAnswer);
+    els.input.addEventListener('keypress', e => {
+      if (e.key === 'Enter') checkAnswer();
+    });
+
+    renderSlide();
+  </script>
+</body>
+</html>

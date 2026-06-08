@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GM Portal - Project Rewind</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: #0a0d1a; color: #f0f2f5; padding: 2rem; }
+    h1 { color: #00d4b8; border-bottom: 1px solid #333; padding-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 2rem; background: #13172c; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    th { background: rgba(0,212,184,0.1); color: #00d4b8; }
+    .completed { color: #20c997; font-weight: bold; }
+    .playing { color: #ffd166; }
+    .empty { text-align: center; color: #888; padding: 2rem; }
+    .btn-abort {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: opacity 0.2s;
+    }
+    .btn-abort:hover { opacity: 0.8; }
+  </style>
+</head>
+<body>
+  <h1>GM PORTAL: Live Tracker</h1>
+  <p>Auto-refreshing every 3 seconds...</p>
+  <table>
+    <thead>
+      <tr>
+            <th>Team Name</th>
+            <th>Current Stage</th>
+            <th>Status</th>
+            <th>Last Active</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+    <tbody id="table-body">
+      <tr><td colspan="5" class="empty">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    async function fetchProgress() {
+      try {
+        const res = await fetch('/api/progress');
+        const data = await res.json();
+        const tbody = document.getElementById('table-body');
+        
+        const teams = Object.keys(data);
+        if (teams.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" class="empty">No teams have logged in yet.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = '';
+        teams.forEach(team => {
+          const info = data[team];
+          const tr = document.createElement('tr');
+          
+          tr.innerHTML = `
+            <td><strong>${team}</strong></td>
+            <td>${info.current_stage}</td>
+            <td class="${info.completed ? 'completed' : 'playing'}">${info.completed ? 'FINISHED' : 'PLAYING'}</td>
+            <td>${info.last_updated}</td>
+            <td><button class="btn-abort" onclick="abortTeam('${team}')">Abort & Reset</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.error('Failed to fetch progress', e);
+      }
+    }
+
+    function abortTeam(teamName) {
+      if (confirm('Are you sure you want to abort and reset team: ' + teamName + '?')) {
+        fetch('/api/abort', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ team: teamName })
+        }).then(() => fetchProgress());
+      }
+    }
+
+    setInterval(fetchProgress, 3000);
+    fetchProgress();
+  </script>
+</body>
+</html>
