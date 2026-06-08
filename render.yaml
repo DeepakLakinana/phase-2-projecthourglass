@@ -14,7 +14,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: ADMIN_PASSWORD
-        value: admin123
+        value: ""  # ⚠ Set this via Render dashboard secret store — do NOT hardcode passwords in this file
       - key: FRONTEND_URL
         value: https://project-rewind.onrender.com
       - key: NODE_ENV

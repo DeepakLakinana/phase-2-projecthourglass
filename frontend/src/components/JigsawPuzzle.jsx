@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import styles from './JigsawPuzzle.module.css'
 
 const GRID = 4 // 4x4 = 16 tiles
@@ -29,10 +29,6 @@ export default function JigsawPuzzle({ imageSrc, onComplete, puzzleId }) {
     setSelected(null)
   }, [puzzleId])
 
-  const checkSolved = useCallback((arr) => {
-    return arr.every((v, i) => v === i)
-  }, [])
-
   const handleTileClick = useCallback((pos) => {
     if (solved) return
 
@@ -43,20 +39,21 @@ export default function JigsawPuzzle({ imageSrc, onComplete, puzzleId }) {
         setSelected(null)
         return
       }
-      // Swap
-      setTiles(prev => {
-        const next = [...prev]
-        ;[next[selected], next[pos]] = [next[pos], next[selected]]
-        if (checkSolved(next)) {
-          setSolved(true)
-          setTimeout(() => onComplete?.(), 800)
-        }
-        return next
-      })
+      const next = [...tiles]
+      ;[next[selected], next[pos]] = [next[pos], next[selected]]
+      setTiles(next)
       setMoves(m => m + 1)
       setSelected(null)
     }
-  }, [selected, solved, checkSolved, onComplete])
+  }, [selected, solved, tiles])
+
+  useEffect(() => {
+    if (solved) return
+    if (tiles.length > 0 && tiles.every((v, i) => v === i)) {
+      setSolved(true)
+      setTimeout(() => onComplete?.(), 800)
+    }
+  }, [tiles, solved, onComplete])
 
   const reset = () => {
     const total = GRID * GRID

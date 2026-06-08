@@ -1,46 +1,127 @@
 import json
 import http.server
 import socketserver
+import os
+import re
+import urllib.parse
 from datetime import datetime
+from html import escape
 
 PORT = 8081
+DB_FILE = "progress_db.json"
+GM_PASSWORD = os.environ.get("GM_PASSWORD", "gm_rewind2024")
 
 progress_db = {}
 
+def load_db():
+    global progress_db
+    if os.path.exists(DB_FILE):
+        try:
+            with open(DB_FILE, "r") as f:
+                progress_db = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            progress_db = {}
+
+def save_db():
+    try:
+        with open(DB_FILE, "w") as f:
+            json.dump(progress_db, f, indent=2)
+    except OSError as e:
+        print(f"Warning: Could not save progress DB: {e}")
+
+load_db()
+
+def is_valid_team_name(name):
+    return bool(name) and len(name) <= 50 and bool(re.match(r'^[a-zA-Z0-9 _-]+$', name))
+
+def parse_token(auth_header):
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return None
+    return auth_header.split(" ", 1)[1]
+
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
+        content_length = int(self.headers.get('Content-Length', 0))
+        if content_length == 0:
+            self.send_response(400)
+            self.end_headers()
+            return
+
+        post_data = self.rfile.read(content_length)
+        try:
+            data = json.loads(post_data)
+        except json.JSONDecodeError:
+            self.send_response(400)
+            self.end_headers()
+            return
+
         if self.path == '/api/progress':
-            content_length = int(self.headers.get('Content-Length', 0))
-            if content_length > 0:
-                post_data = self.rfile.read(content_length)
-                try:
-                    data = json.loads(post_data)
-                    team = data.get('team')
-                    stage = data.get('stage')
-                    completed = data.get('completed', False)
-                    if team:
-                        progress_db[team] = {
-                            "current_stage": stage,
-                            "last_updated": datetime.now().strftime("%H:%M:%S"),
-                            "completed": completed
-                        }
-                    self.send_response(200)
-                    self.send_header('Content-type', 'application/json')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({"status": "ok"}).encode())
-                except Exception as e:
-                    self.send_response(400)
-                    self.end_headers()
-            else:
+            team = data.get('team', '')
+            stage = data.get('stage', '')
+            completed = data.get('completed', False)
+
+            if not is_valid_team_name(team):
                 self.send_response(400)
+                self.send_header('Content-type', 'application/json')
                 self.end_headers()
+                self.wfile.write(json.dumps({"error": "Invalid team name. Use letters, numbers, spaces, hyphens, and underscores only."}).encode())
+                return
+
+            progress_db[team] = {
+                "current_stage": stage,
+                "last_updated": datetime.now().strftime("%H:%M:%S"),
+                "completed": completed,
+            }
+            save_db()
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"status": "ok"}).encode())
+
+        elif self.path == '/api/verify':
+            puzzle = data.get('puzzle', '')
+            answer = data.get('answer', '').strip().upper()
+
+            ANSWER_KEYS = {
+                'r1_year': '2024',
+                'r1_month': 'MAY',
+                'r2_1': '6',
+                'r2_2': '8',
+                'r2_3': '3',
+                'r2_4': '5',
+                'r2_5': '5',
+                'r2_6': '3',
+                'r2_7': '26',
+                'morse': '43.733334, 7.416667',
+            }
+
+            correct = ANSWER_KEYS.get(puzzle)
+            if correct is None:
+                self.send_response(404)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "Unknown puzzle"}).encode())
+                return
+
+            match = (answer == correct)
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"correct": match}).encode())
+
         elif self.path == '/api/abort':
-            content_length = int(self.headers['Content-Length'])
-            post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
-            team_name = data.get('team')
+            token = parse_token(self.headers.get("Authorization", ""))
+            if token != GM_PASSWORD:
+                self.send_response(401)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "Unauthorized"}).encode())
+                return
+
+            team_name = data.get('team', '')
             if team_name in progress_db:
                 progress_db[team_name]['aborted'] = True
+                save_db()
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
@@ -50,27 +131,54 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == '/api/progress':
+            token = parse_token(self.headers.get("Authorization", ""))
+            if token != GM_PASSWORD:
+                self.send_response(401)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "Unauthorized"}).encode())
+                return
+
+            safe_db = {}
+            for team, info in progress_db.items():
+                safe_db[escape(team)] = {
+                    "current_stage": info.get("current_stage", ""),
+                    "last_updated": info.get("last_updated", ""),
+                    "completed": info.get("completed", False),
+                }
+
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
-            self.wfile.write(json.dumps(progress_db).encode('utf-8'))
-        elif self.path.startswith('/api/status?team='):
-            import urllib.parse
-            team_name = urllib.parse.unquote(self.path.split('=')[1])
+            self.wfile.write(json.dumps(safe_db).encode('utf-8'))
+
+        elif self.path.startswith('/api/status?'):
+            params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            team_name = params.get('team', [''])[0]
             aborted = False
             if team_name in progress_db and progress_db[team_name].get('aborted', False):
                 aborted = True
                 del progress_db[team_name]
+                save_db()
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
             self.wfile.write(json.dumps({"aborted": aborted}).encode('utf-8'))
         else:
             super().do_GET()
 
-# Allow port reuse
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Authorization, Content-Type')
+        self.end_headers()
+
 socketserver.TCPServer.allow_reuse_address = True
 
 with socketserver.TCPServer(("", PORT), CustomHandler) as httpd:
     print(f"Serving at port {PORT}")
+    print(f"GM password set via GM_PASSWORD env var" if os.environ.get("GM_PASSWORD") else f"Using default GM password (set GM_PASSWORD env var to override)")
     httpd.serve_forever()

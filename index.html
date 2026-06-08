@@ -213,7 +213,7 @@
         <div id="solved-year" class="jigsaw-solved form-group">
           <p style="color: var(--success); font-weight: bold;">[ IMAGE RECONSTRUCTED ]</p>
           <input type="text" id="input-year" placeholder="Enter the year..." autocomplete="off">
-          <button onclick="checkAnswer('year', '2024', null, 'round1-month', 'Round 1: Month Challenge', () => initJigsaw('jigsaw-month', 'assets/r1_month.png', 4, 'solved-month'))">Restore Memory</button>
+          <button onclick="checkAnswer('year', 'r1_year', null, 'round1-month', 'Round 1: Month Challenge', () => initJigsaw('jigsaw-month', 'assets/r1_month.png', 4, 'solved-month'))">Restore Memory</button>
           <div id="fb-year" class="feedback"></div>
         </div>
       </div>
@@ -239,7 +239,7 @@
         <div id="solved-month" class="jigsaw-solved form-group">
           <p style="color: var(--success); font-weight: bold;">[ IMAGE RECONSTRUCTED ]</p>
           <input type="text" id="input-month" placeholder="Enter the month..." autocomplete="off">
-          <button onclick="checkAnswer('month', 'MAY', null, 'round2-date', 'Round 2: Date Challenge')">Restore Timeline</button>
+          <button onclick="checkAnswer('month', 'r1_month', null, 'round2-date', 'Round 2: Date Challenge')">Restore Timeline</button>
           <div id="fb-month" class="feedback"></div>
         </div>
       </div>
@@ -374,21 +374,32 @@
       nav('intro');
     }
 
-    // Generic Answer Check
-    function checkAnswer(inputId, correctAns, imgId, nextViewId, nextStageName, callback) {
-      const val = document.getElementById('input-' + inputId).value.trim().toUpperCase();
+    // Generic Answer Check (server-verified)
+    async function checkAnswer(inputId, puzzleKey, imgId, nextViewId, nextStageName, callback) {
+      const val = document.getElementById('input-' + inputId).value.trim();
       const fb = document.getElementById('fb-' + inputId);
-      if (val === correctAns) {
-        fb.innerText = "Fragment Restored!";
-        fb.className = "feedback success";
-        if (imgId) document.getElementById(imgId).classList.add('restored');
-        setTimeout(() => {
-          nav(nextViewId);
-          reportProgress(nextStageName);
-          if (callback) callback();
-        }, 1500);
-      } else {
-        fb.innerText = "Incorrect data. Memory corrupted. Try again.";
+      try {
+        const res = await fetch('/api/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ puzzle: puzzleKey, answer: val })
+        });
+        const data = await res.json();
+        if (data.correct) {
+          fb.innerText = "Fragment Restored!";
+          fb.className = "feedback success";
+          if (imgId) document.getElementById(imgId).classList.add('restored');
+          setTimeout(() => {
+            nav(nextViewId);
+            reportProgress(nextStageName);
+            if (callback) callback();
+          }, 1500);
+        } else {
+          fb.innerText = "Incorrect data. Memory corrupted. Try again.";
+          fb.className = "feedback error";
+        }
+      } catch (e) {
+        fb.innerText = "Server error. Please try again.";
         fb.className = "feedback error";
       }
     }
@@ -473,13 +484,13 @@
 
     // Round 2: Date Challenge Logic
     const R2_PUZZLES = [
-      { id: 1, title: 'The Storm', riddle: "The clouds have not yet spoken.\nTheir message lies in the waiting.\nMeasure the distance between now and the storm,\nAnd the hidden key will reveal itself.", img: "assets/r2_1_weather.png", ans: "6" },
-      { id: 2, title: 'The Gathering', riddle: "Five papers lie before you.\nFour speak of journeys, payments, and farewells.\nOne remembers a gathering.\nFind where the guests were meant to meet,\nAnd the hidden key will reveal itself.", img: "assets/r2_2_receipt.png", ans: "8" },
-      { id: 3, title: 'The Tale', riddle: "Do not measure the achievement.\nMeasure the way it is remembered.\nThe key lies not in the quantity,\nBut in the characters that tell its tale.", img: "assets/r2_3_post.png", ans: "3" },
-      { id: 4, title: 'The Champion', riddle: "One number describes the plan.\nOne number marks what is yet to come.\nOne number celebrates a completed task.\nSeek the champion, and the key is yours.", img: "assets/r2_4_calendar.png", ans: "5" },
-      { id: 5, title: 'The Span', riddle: "A circle marks the chosen path.\nThree records remain untouched.\nSeek the furthest whisper in time.\nThe key is found not at the destination,\nBut in the span that separates certainty from fate.", img: "assets/r2_5_whatsapp.png", ans: "5" },
-      { id: 6, title: 'The Room', riddle: "One date unlocks the room,\nAnother turns the final key.\nCount only the darkness in between,\nAnd the hidden number will reveal itself.", img: "assets/r2_6_hotel.png", ans: "3" },
-      { id: 7, title: 'Final Equation', riddle: "The numbers don't tell everything but equations do.\nTarget Date = (Hotel × Weather) + Receipt + (Calendar - WhatsApp) × Post", img: null, ans: "26" }
+      { id: 1, title: 'The Storm', riddle: "The clouds have not yet spoken.\nTheir message lies in the waiting.\nMeasure the distance between now and the storm,\nAnd the hidden key will reveal itself.", img: "assets/r2_1_weather.png" },
+      { id: 2, title: 'The Gathering', riddle: "Five papers lie before you.\nFour speak of journeys, payments, and farewells.\nOne remembers a gathering.\nFind where the guests were meant to meet,\nAnd the hidden key will reveal itself.", img: "assets/r2_2_receipt.png" },
+      { id: 3, title: 'The Tale', riddle: "Do not measure the achievement.\nMeasure the way it is remembered.\nThe key lies not in the quantity,\nBut in the characters that tell its tale.", img: "assets/r2_3_post.png" },
+      { id: 4, title: 'The Champion', riddle: "One number describes the plan.\nOne number marks what is yet to come.\nOne number celebrates a completed task.\nSeek the champion, and the key is yours.", img: "assets/r2_4_calendar.png" },
+      { id: 5, title: 'The Span', riddle: "A circle marks the chosen path.\nThree records remain untouched.\nSeek the furthest whisper in time.\nThe key is found not at the destination,\nBut in the span that separates certainty from fate.", img: "assets/r2_5_whatsapp.png" },
+      { id: 6, title: 'The Room', riddle: "One date unlocks the room,\nAnother turns the final key.\nCount only the darkness in between,\nAnd the hidden number will reveal itself.", img: "assets/r2_6_hotel.png" },
+      { id: 7, title: 'Final Equation', riddle: "The numbers don't tell everything but equations do.\nTarget Date = (Hotel × Weather) + Receipt + (Calendar - WhatsApp) × Post", img: null }
     ];
     let r2Index = 0;
 
@@ -501,28 +512,40 @@
       reportProgress(`Date Challenge: Puzzle ${p.id}`);
     }
 
-    function checkR2Answer() {
+    async function checkR2Answer() {
       const val = document.getElementById('r2-input').value.trim();
       const fb = document.getElementById('fb-r2');
-      if (val === R2_PUZZLES[r2Index].ans) {
-        fb.innerText = "Correct!";
-        fb.className = "feedback success";
-        setTimeout(() => {
-          r2Index++;
-          if (r2Index < R2_PUZZLES.length) renderR2();
-          else {
-            nav('round2-morse');
-            reportProgress('Round 2: Morse Code');
-          }
-        }, 1000);
-      } else {
-        fb.innerText = "Incorrect answer.";
+      try {
+        const res = await fetch('/api/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ puzzle: 'r2_' + R2_PUZZLES[r2Index].id, answer: val })
+        });
+        const data = await res.json();
+        if (data.correct) {
+          fb.innerText = "Correct!";
+          fb.className = "feedback success";
+          setTimeout(() => {
+            r2Index++;
+            if (r2Index < R2_PUZZLES.length) renderR2();
+            else {
+              nav('round2-morse');
+              reportProgress('Round 2: Morse Code');
+            }
+          }, 1000);
+        } else {
+          fb.innerText = "Incorrect answer.";
+          fb.className = "feedback error";
+        }
+      } catch (e) {
+        fb.innerText = "Server error. Please try again.";
         fb.className = "feedback error";
       }
     }
     renderR2(); // init
 
     // Round 2: Morse Code Logic
+    // The coordinates are needed client-side to generate the audio signal
     const morseTarget = "43.733334, 7.416667";
     const morseDict = {
       '0':'-----', '1':'.----', '2':'..---', '3':'...--', '4':'....-', '5':'.....',
@@ -595,18 +618,29 @@
       }, (time - audioCtx.currentTime) * 1000);
     }
 
-    function checkMorse() {
+    async function checkMorse() {
       const val = document.getElementById('input-morse').value.trim();
       const fb = document.getElementById('fb-morse');
-      if (val.replace(/\s/g, '') === morseTarget.replace(/\s/g, '')) {
-        fb.innerText = "Coordinates Verified!";
-        fb.className = "feedback success";
-        setTimeout(() => {
-          nav('victory');
-          reportProgress('Victory!', true);
-        }, 1500);
-      } else {
-        fb.innerText = "Signal invalid. Recalculate coordinates.";
+      try {
+        const res = await fetch('/api/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ puzzle: 'morse', answer: val })
+        });
+        const data = await res.json();
+        if (data.correct) {
+          fb.innerText = "Coordinates Verified!";
+          fb.className = "feedback success";
+          setTimeout(() => {
+            nav('victory');
+            reportProgress('Victory!', true);
+          }, 1500);
+        } else {
+          fb.innerText = "Signal invalid. Recalculate coordinates.";
+          fb.className = "feedback error";
+        }
+      } catch (e) {
+        fb.innerText = "Server error. Please try again.";
         fb.className = "feedback error";
       }
     }

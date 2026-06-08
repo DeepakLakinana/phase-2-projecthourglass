@@ -64,16 +64,10 @@ export default function Round2() {
     setFeedback(null)
 
     try {
-      // Mocking backend for local UI testing
-      const answers = { 1: '6', 2: '8', 3: '3', 4: '5', 5: '5', 6: '3', 7: '26' }
-      const isCorrect = answer.trim() === answers[puzzle.id]
-      const data = isCorrect ? { correct: true } : { correct: false, message: 'Incorrect answer. Try again!' }
-      
-      // Simulate network delay
-      await new Promise(r => setTimeout(r, 500))
+      const { data } = await api.post(`/rounds/2/puzzle/${puzzle.id}/submit`, { answer: answer.trim() })
 
       if (data.correct) {
-        setFeedback({ type: 'success', message: 'Correct!' })
+        setFeedback({ type: 'success', message: data.message })
         setTimeout(() => {
           if (currentSlide < PUZZLES.length - 1) {
             setCurrentSlide(s => s + 1)

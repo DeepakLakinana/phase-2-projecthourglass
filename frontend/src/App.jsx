@@ -24,7 +24,9 @@ export default function App() {
           <Route path="/game/round/1" element={
             <ProtectedRoute><Round1 /></ProtectedRoute>
           } />
-          <Route path="/game/round/2" element={<Round2 />} />
+          <Route path="/game/round/2" element={
+            <ProtectedRoute><Round2 /></ProtectedRoute>
+          } />
           <Route path="/game/victory" element={
             <ProtectedRoute><Victory /></ProtectedRoute>
           } />
