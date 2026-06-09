@@ -30,6 +30,8 @@ def save_db():
 
 load_db()
 
+GM_PASSWORD = os.environ.get('GM_PASSWORD', 'rewind2024')
+
 def is_valid_team_name(name):
     return bool(name) and len(name) <= 50 and bool(re.match(r'^[a-zA-Z0-9 _-]+$', name))
 
@@ -114,6 +116,15 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Content-type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({"correct": match}).encode())
+
+        elif self.path == '/api/gm-auth':
+            password = data.get('password', '')
+            authenticated = (password == GM_PASSWORD)
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps({"authenticated": authenticated}).encode())
 
         elif self.path == '/api/abort':
             team_name = data.get('team', '')

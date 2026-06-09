@@ -80,8 +80,19 @@
 </head>
 <body>
 
+  <!-- LOGIN -->
+  <div id="gm-login" class="login-container">
+    <div class="login-card">
+      <h1>⟁ GM PORTAL</h1>
+      <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.2rem;">Enter the Game Master password to access the dashboard.</p>
+      <input type="password" id="gm-password" placeholder="Password" autocomplete="off">
+      <button onclick="gmLogin()">Unlock Portal</button>
+      <div class="login-error" id="gm-login-error">Incorrect password. Try again.</div>
+    </div>
+  </div>
+
   <!-- DASHBOARD -->
-  <div id="gm-dashboard">
+  <div id="gm-dashboard" style="display:none;">
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
       <div>
         <h1>⟁ PROJECT REWIND — GM PORTAL</h1>
@@ -116,6 +127,35 @@
   </div>
 
   <script>
+    async function gmLogin() {
+      const pw = document.getElementById('gm-password').value.trim();
+      if (!pw) return;
+      document.getElementById('gm-login-error').style.display = 'none';
+      try {
+        const res = await fetch('/api/gm-auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pw })
+        });
+        const data = await res.json();
+        if (data.authenticated) {
+          document.getElementById('gm-login').style.display = 'none';
+          document.getElementById('gm-dashboard').style.display = 'block';
+          initDashboard();
+        } else {
+          document.getElementById('gm-login-error').style.display = 'block';
+        }
+      } catch (e) {
+        document.getElementById('gm-login-error').textContent = 'Server error. Try again.';
+        document.getElementById('gm-login-error').style.display = 'block';
+      }
+    }
+
+    // Allow Enter key
+    document.getElementById('gm-password').addEventListener('keypress', e => {
+      if (e.key === 'Enter') gmLogin();
+    });
+
     const STAGE_LABELS = [
       { key: 'Intro Story', short: 'Intro' },
       { key: 'Round 1: Year Challenge', short: 'R1:Y' },
@@ -258,12 +298,14 @@
       }).then(() => fetchProgress());
     }
 
-    pollInterval = setInterval(fetchProgress, 3000);
-    fetchProgress();
+    function initDashboard() {
+      pollInterval = setInterval(fetchProgress, 3000);
+      fetchProgress();
 
-    window.addEventListener('beforeunload', function() {
-      if (pollInterval) clearInterval(pollInterval);
-    });
+      window.addEventListener('beforeunload', function() {
+        if (pollInterval) clearInterval(pollInterval);
+      });
+    }
   </script>
 </body>
 </html>
