@@ -1,0 +1,46 @@
+{
+  "1234": {
+    "current_stage": "Round 2: Morse Code",
+    "last_updated": "17:35:20",
+    "completed": false,
+    "completed_stages": [
+      "Intro Story",
+      "Round 1: Year Challenge",
+      "Round 1: Month Challenge",
+      "Round 2: Date Challenge",
+      "Date Challenge: Puzzle 2",
+      "Date Challenge: Puzzle 3",
+      "Date Challenge: Puzzle 4",
+      "Date Challenge: Puzzle 5",
+      "Date Challenge: Puzzle 6",
+      "Date Challenge: Puzzle 7",
+      "Round 2: Morse Code"
+    ]
+  },
+  "test123": {
+    "current_stage": "intro",
+    "last_updated": "19:14:32",
+    "completed": false,
+    "completed_stages": [
+      "intro"
+    ]
+  },
+  "h": {
+    "current_stage": "Round 2: Morse Code",
+    "last_updated": "20:39:45",
+    "completed": false,
+    "completed_stages": [
+      "Intro Story",
+      "Round 1: Year Challenge",
+      "Round 1: Month Challenge",
+      "Round 2: Date Challenge",
+      "Date Challenge: Puzzle 2",
+      "Date Challenge: Puzzle 3",
+      "Date Challenge: Puzzle 4",
+      "Date Challenge: Puzzle 5",
+      "Date Challenge: Puzzle 6",
+      "Date Challenge: Puzzle 7",
+      "Round 2: Morse Code"
+    ]
+  }
+}
