@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import api from '../api/client'
 import styles from './Round2.module.css'
+
+const ANSWERS = { 1: '6', 2: '8', 3: '3', 4: '5', 5: '5', 6: '3', 7: '26' }
 
 const PUZZLES = [
   {
@@ -63,11 +64,12 @@ export default function Round2() {
     setLoading(true)
     setFeedback(null)
 
-    try {
-      const { data } = await api.post(`/rounds/2/puzzle/${puzzle.id}/submit`, { answer: answer.trim() })
+    const correct = ANSWERS[puzzle.id]
+    const match = answer.trim().toUpperCase() === correct
 
-      if (data.correct) {
-        setFeedback({ type: 'success', message: data.message })
+    setTimeout(() => {
+      if (match) {
+        setFeedback({ type: 'success', message: 'Correct!' })
         setTimeout(() => {
           if (currentSlide < PUZZLES.length - 1) {
             setCurrentSlide(s => s + 1)
@@ -78,13 +80,10 @@ export default function Round2() {
           }
         }, 1000)
       } else {
-        setFeedback({ type: 'error', message: data.message })
+        setFeedback({ type: 'error', message: 'Incorrect. Try again.' })
       }
-    } catch (err) {
-      setFeedback({ type: 'error', message: err.response?.data?.error || 'Server error. Try again.' })
-    } finally {
       setLoading(false)
-    }
+    }, 500)
   }
 
   return (

@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import JigsawPuzzle from '../components/JigsawPuzzle'
-import api from '../api/client'
 import styles from './Round1.module.css'
+
+const ANSWERS = {
+  1: '2024',
+  2: 'MAY',
+}
 
 const STEPS = [
   {
@@ -47,32 +51,28 @@ export default function Round1() {
     setLoading(true)
     setFeedback(null)
 
-    try {
-      const { data } = await api.post(`/rounds/1/puzzle/${step.puzzle}/submit`, { answer: answer.trim() })
+    const correct = ANSWERS[step.puzzle]
+    const match = answer.trim().toUpperCase() === correct
 
-      if (data.correct) {
-        setFeedback({ type: 'success', message: data.message })
+    setTimeout(() => {
+      if (match) {
+        setFeedback({ type: 'success', message: 'Correct!' })
         setTimeout(() => {
           if (currentStep < STEPS.length - 1) {
-            // Move to next puzzle
             setCurrentStep(1)
             setPuzzleSolved(false)
             setAnswer('')
             setFeedback(null)
             setShowHint(false)
           } else {
-            // Round complete!
             navigate('/game')
           }
         }, 1500)
       } else {
-        setFeedback({ type: 'error', message: data.message })
+        setFeedback({ type: 'error', message: 'Incorrect. Try again.' })
       }
-    } catch (err) {
-      setFeedback({ type: 'error', message: err.response?.data?.error || 'Server error. Try again.' })
-    } finally {
       setLoading(false)
-    }
+    }, 500)
   }
 
   return (
