@@ -7,7 +7,7 @@ import urllib.parse
 from datetime import datetime
 from html import escape
 
-PORT = 8081
+PORT = int(os.environ.get('PORT', 8081))
 DB_FILE = "progress_db.json"
 
 progress_db = {}
