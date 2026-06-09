@@ -5,6 +5,3 @@ services:
     plan: free
     buildCommand: ""
     startCommand: python server.py
-    envVars:
-      - key: PORT
-        value: 8081
