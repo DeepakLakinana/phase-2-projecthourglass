@@ -431,18 +431,29 @@
         <div id="solved-month" class="jigsaw-solved form-group">
           <p style="color: var(--success); font-weight: bold;">[ IMAGE RECONSTRUCTED ]</p>
           <input type="text" id="input-month" placeholder="Enter the month..." autocomplete="off">
-          <button onclick="checkAnswer('month', 'r1_month', null, 'round2-date', 'Round 2: Date Challenge')">Restore Timeline</button>
+          <button onclick="checkAnswer('month', 'r1_month', null, 'round2-reminder', 'Round 2: Date Challenge')">Restore Timeline</button>
           <div id="fb-month" class="feedback"></div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- REMINDER: MEMORIZE NUMBERS -->
+  <div id="view-round2-reminder" class="view">
+    <div class="card" style="text-align: center;">
+      <h2 style="color: var(--accent-gold);">⚠ MEMORY OVERLOAD WARNING</h2>
+      <p>These images contain critical numerical data. The system will not allow you to revisit them.</p>
+      <p style="color: var(--accent-teal); font-weight: bold; font-size: 1.2rem;">Study each image carefully and remember the numbers you find.</p>
+      <p style="color: var(--text-secondary);">Once you proceed, these images will be gone.</p>
+      <button style="margin-top: 2rem;" onclick="nav('round2-date'); reportProgress('Round 2: Date Challenge');">I Understand — Begin →</button>
+    </div>
+  </div>
+
   <!-- ROUND 2: DATE CHALLENGE -->
   <div id="view-round2-date" class="view">
     <div style="text-align: center; margin-bottom: 2rem;">
-      <h1 style="color: var(--accent-red);">ROUND 2: DATE AND MORSE CODE</h1>
-      <p style="font-family: monospace;">Appearances deceive. Hidden within the image lies a number. Only careful observation will reveal it.</p>
+      <h1 style="color: var(--accent-red);">MEMORY FRAGMENTS</h1>
+      <p style="font-family: monospace;">Hidden within each image lies a number. Only careful observation will reveal it.</p>
     </div>
     
     <div class="card split-layout">
@@ -464,7 +475,7 @@
   <!-- ROUND 2: COORDINATE CHALLENGE (Phone UI) -->
   <div id="view-round2-morse" class="view">
     <div style="text-align: center; margin-bottom: 1.5rem;">
-      <h1 style="color: var(--accent-red); font-size: 1.6rem;">COORDINATE CHALLENGE</h1>
+      <h1 style="color: var(--accent-red); font-size: 1.6rem;">SAM'S PHONE</h1>
       <p style="font-size: 0.9rem;">Sam's recovered phone contains clues to his location. Explore each app to find the missing digits.</p>
     </div>
 
@@ -885,12 +896,12 @@
 
     // Round 2: Date Challenge Logic
     const R2_PUZZLES = [
-      { id: 1, title: 'The Storm', riddle: "The clouds have not yet spoken.\nTheir message lies in the waiting.\nMeasure the distance between now and the storm,\nAnd the hidden key will reveal itself.", img: "assets/r2_1_weather.jpg" },
-      { id: 2, title: 'The Gathering', riddle: "Five papers lie before you.\nFour speak of journeys, payments, and farewells.\nOne remembers a gathering.\nFind where the guests were meant to meet,\nAnd the hidden key will reveal itself.", img: "assets/r2_2_receipt.jpg" },
-      { id: 3, title: 'The Tale', riddle: "Do not measure the achievement.\nMeasure the way it is remembered.\nThe key lies not in the quantity,\nBut in the characters that tell its tale.", img: "assets/r2_3_post.jpg" },
-      { id: 4, title: 'The Champion', riddle: "One number describes the plan.\nOne number marks what is yet to come.\nOne number celebrates a completed task.\nSeek the champion, and the key is yours.", img: "assets/r2_4_calendar.jpg" },
-      { id: 5, title: 'The Span', riddle: "A circle marks the chosen path.\nThree records remain untouched.\nSeek the furthest whisper in time.\nThe key is found not at the destination,\nBut in the span that separates certainty from fate.", img: "assets/r2_5_whatsapp.jpg" },
-      { id: 6, title: 'The Room', riddle: "One date unlocks the room,\nAnother turns the final key.\nCount only the darkness in between,\nAnd the hidden number will reveal itself.", img: "assets/r2_6_hotel.jpg" },
+      { id: 1, title: 'The Storm', riddle: "The clouds have not yet spoken.\nTheir message lies in the waiting.\nMeasure the distance between now and the storm,\nAnd the hidden key will reveal itself.", img: "assets/r2_1.jpg" },
+      { id: 2, title: 'The Gathering', riddle: "Five papers lie before you.\nFour speak of journeys, payments, and farewells.\nOne remembers a gathering.\nFind where the guests were meant to meet,\nAnd the hidden key will reveal itself.", img: "assets/r2_2.jpg" },
+      { id: 3, title: 'The Tale', riddle: "Do not measure the achievement.\nMeasure the way it is remembered.\nThe key lies not in the quantity,\nBut in the characters that tell its tale.", img: "assets/r2_3.jpg" },
+      { id: 4, title: 'The Champion', riddle: "One number describes the plan.\nOne number marks what is yet to come.\nOne number celebrates a completed task.\nSeek the champion, and the key is yours.", img: "assets/r2_4.jpg" },
+      { id: 5, title: 'The Span', riddle: "A circle marks the chosen path.\nThree records remain untouched.\nSeek the furthest whisper in time.\nThe key is found not at the destination,\nBut in the span that separates certainty from fate.", img: "assets/r2_5.jpg" },
+      { id: 6, title: 'The Room', riddle: "One date unlocks the room,\nAnother turns the final key.\nCount only the darkness in between,\nAnd the hidden number will reveal itself.", img: "assets/r2_6.jpg" },
       { id: 7, title: 'Final Equation', riddle: "The numbers don't tell everything but equations do.\nTarget Date = (Hotel × Weather) + Receipt + (Calendar - WhatsApp) × Post", img: null }
     ];
     let r2Index = 0;
@@ -931,7 +942,7 @@
             if (r2Index < R2_PUZZLES.length) renderR2();
             else {
               nav('round2-morse');
-              reportProgress('Round 2: Morse Code');
+              reportProgress('Round 2: Sam\'s Phone');
             }
           }, 1000);
         } else {
