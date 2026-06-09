@@ -122,7 +122,7 @@ The frontend is deployed at [phase2-round1-2.vercel.app](https://phase2-round1-2
 3. Set the **Root Directory** to `frontend`
 4. Set **Framework Preset** to `Vite`
 5. Add environment variables in Vercel dashboard:
-   - `VITE_API_URL` — your backend URL (e.g. `https://your-backend.vercel.app`)
+   - `VITE_API_URL` — your backend URL (e.g. `https://your-backend.vercel.app` or `https://your-app.onrender.com/api`). **Required** — without this, API calls will fail with "Server error".
 6. Deploy! The app builds from `frontend/` automatically.
 
 ### Manual deploy
