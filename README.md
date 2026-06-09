@@ -108,7 +108,35 @@ Victory Screen 🏁
 
 ---
 
-## 📦 Deploying to Render
+## 📦 Deploying to Vercel
+
+The frontend is deployed at [phase2-round1-2.vercel.app](https://phase2-round1-2.vercel.app/).
+
+### Prerequisites
+- [Vercel CLI](https://vercel.com/docs/cli) (`npm i -g vercel`)
+- Vercel account connected to GitHub
+
+### Steps
+1. Push this repo to GitHub
+2. Go to [vercel.com/new](https://vercel.com/new) and import the repo
+3. Set the **Root Directory** to `frontend`
+4. Set **Framework Preset** to `Vite`
+5. Add environment variables in Vercel dashboard:
+   - `VITE_API_URL` — your backend URL (e.g. `https://your-backend.vercel.app`)
+6. Deploy! The app builds from `frontend/` automatically.
+
+### Manual deploy
+```bash
+cd frontend
+npm install
+vercel --prod
+```
+
+The main Python game server (`server.py`) runs locally on port 8081 and is not part of the Vercel deployment.
+
+---
+
+## 📦 Deploying to Render (Legacy)
 
 1. Push this repo to GitHub
 2. Log in to [render.com](https://render.com)
@@ -117,14 +145,14 @@ Victory Screen 🏁
 5. Set the `ADMIN_PASSWORD` environment variable in the Render dashboard
 6. Deploy! Migrations run automatically on first start.
 
-### Adding real puzzle images
+### Adding real puzzle images (Render)
 
 Replace placeholder paths in `frontend/public/assets/images/`:
 - `puzzle1_year.jpg` — Year collage (2024 events)
 - `puzzle2_month.jpg` — Month collage (May events)
 - `monaco1.jpg` through `monaco6.jpg` — Monaco photos for Gallery app
 
-### Adding audio files
+### Adding audio files (Render)
 
 Place MP3s in `frontend/public/assets/audio/`:
 - `note1.mp3`, `note2.mp3`, `note3.mp3`
