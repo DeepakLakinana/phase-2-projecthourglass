@@ -381,7 +381,7 @@
       <p>The system reports that this is the last memory checkpoint recorded before Sam disappeared. However, the memory has been damaged. Important details have been shattered into fragments, making it impossible to determine exactly when Sam was last seen.</p>
       <p>Scattered around the memory are pieces of a broken timeline.</p>
       <p style="color: var(--accent-gold); font-weight: bold;">Figure out the timeline( year, month, date) and the coordinates where Sam is stuck in and get him back!</p>
-      <button style="margin-top: 2rem;" onclick="nav('round1-year'); reportProgress('Round 1: Year Challenge'); initJigsaw('jigsaw-year', 'assets/r1_year.png?v=2', 4, 'solved-year');">Initiate Recovery →</button>
+      <button style="margin-top: 2rem;" onclick="nav('round1-year'); reportProgress('Round 1: Year Challenge'); initJigsaw('jigsaw-year', 'assets/r1_year.jpg', 4, 'solved-year');">Initiate Recovery →</button>
     </div>
   </div>
 
@@ -405,7 +405,7 @@
         <div id="solved-year" class="jigsaw-solved form-group">
           <p style="color: var(--success); font-weight: bold;">[ IMAGE RECONSTRUCTED ]</p>
           <input type="text" id="input-year" placeholder="Enter the year..." autocomplete="off">
-          <button onclick="checkAnswer('year', 'r1_year', null, 'round1-month', 'Round 1: Month Challenge', () => initJigsaw('jigsaw-month', 'assets/r1_month.png?v=2', 4, 'solved-month'))">Restore Memory</button>
+          <button onclick="checkAnswer('year', 'r1_year', null, 'round1-month', 'Round 1: Month Challenge', () => initJigsaw('jigsaw-month', 'assets/r1_month.jpg', 4, 'solved-month'))">Restore Memory</button>
           <div id="fb-year" class="feedback"></div>
         </div>
       </div>
@@ -885,12 +885,12 @@
 
     // Round 2: Date Challenge Logic
     const R2_PUZZLES = [
-      { id: 1, title: 'The Storm', riddle: "The clouds have not yet spoken.\nTheir message lies in the waiting.\nMeasure the distance between now and the storm,\nAnd the hidden key will reveal itself.", img: "assets/r2_1_weather.png?v=2" },
-      { id: 2, title: 'The Gathering', riddle: "Five papers lie before you.\nFour speak of journeys, payments, and farewells.\nOne remembers a gathering.\nFind where the guests were meant to meet,\nAnd the hidden key will reveal itself.", img: "assets/r2_2_receipt.png?v=2" },
-      { id: 3, title: 'The Tale', riddle: "Do not measure the achievement.\nMeasure the way it is remembered.\nThe key lies not in the quantity,\nBut in the characters that tell its tale.", img: "assets/r2_3_post.png?v=2" },
-      { id: 4, title: 'The Champion', riddle: "One number describes the plan.\nOne number marks what is yet to come.\nOne number celebrates a completed task.\nSeek the champion, and the key is yours.", img: "assets/r2_4_calendar.png?v=2" },
-      { id: 5, title: 'The Span', riddle: "A circle marks the chosen path.\nThree records remain untouched.\nSeek the furthest whisper in time.\nThe key is found not at the destination,\nBut in the span that separates certainty from fate.", img: "assets/r2_5_whatsapp.png?v=2" },
-      { id: 6, title: 'The Room', riddle: "One date unlocks the room,\nAnother turns the final key.\nCount only the darkness in between,\nAnd the hidden number will reveal itself.", img: "assets/r2_6_hotel.png?v=2" },
+      { id: 1, title: 'The Storm', riddle: "The clouds have not yet spoken.\nTheir message lies in the waiting.\nMeasure the distance between now and the storm,\nAnd the hidden key will reveal itself.", img: "assets/r2_1_weather.jpg" },
+      { id: 2, title: 'The Gathering', riddle: "Five papers lie before you.\nFour speak of journeys, payments, and farewells.\nOne remembers a gathering.\nFind where the guests were meant to meet,\nAnd the hidden key will reveal itself.", img: "assets/r2_2_receipt.jpg" },
+      { id: 3, title: 'The Tale', riddle: "Do not measure the achievement.\nMeasure the way it is remembered.\nThe key lies not in the quantity,\nBut in the characters that tell its tale.", img: "assets/r2_3_post.jpg" },
+      { id: 4, title: 'The Champion', riddle: "One number describes the plan.\nOne number marks what is yet to come.\nOne number celebrates a completed task.\nSeek the champion, and the key is yours.", img: "assets/r2_4_calendar.jpg" },
+      { id: 5, title: 'The Span', riddle: "A circle marks the chosen path.\nThree records remain untouched.\nSeek the furthest whisper in time.\nThe key is found not at the destination,\nBut in the span that separates certainty from fate.", img: "assets/r2_5_whatsapp.jpg" },
+      { id: 6, title: 'The Room', riddle: "One date unlocks the room,\nAnother turns the final key.\nCount only the darkness in between,\nAnd the hidden number will reveal itself.", img: "assets/r2_6_hotel.jpg" },
       { id: 7, title: 'Final Equation', riddle: "The numbers don't tell everything but equations do.\nTarget Date = (Hotel × Weather) + Receipt + (Calendar - WhatsApp) × Post", img: null }
     ];
     let r2Index = 0;
