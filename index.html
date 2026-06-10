@@ -440,12 +440,15 @@
 
   <!-- REMINDER: MEMORIZE NUMBERS -->
   <div id="view-round2-reminder" class="view">
-    <div class="card" style="text-align: center;">
-      <h2 style="color: var(--accent-gold);">⚠ MEMORY OVERLOAD WARNING</h2>
-      <p>These images contain critical numerical data. The system will not allow you to revisit them.</p>
-      <p style="color: var(--accent-teal); font-weight: bold; font-size: 1.2rem;">Study each image carefully and remember the numbers you find.</p>
-      <p style="color: var(--text-secondary);">Once you proceed, these images will be gone.</p>
-      <button style="margin-top: 2rem;" onclick="nav('round2-date'); reportProgress('Round 2: Date Challenge');">I Understand — Begin →</button>
+    <div class="card" style="text-align: center; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: var(--accent-red);">⚠ CRITICAL — READ THIS FIRST</h2>
+      <div style="background: rgba(255,59,92,0.1); border: 1px solid rgba(255,59,92,0.3); border-radius: 8px; padding: 1.2rem; margin: 1.5rem 0;">
+        <p style="color: var(--accent-red); font-weight: bold; font-size: 1.1rem;">You will NOT be able to view these images again once you proceed.</p>
+      </div>
+      <p>Each image contains a hidden number. You must study each image carefully and remember both the <strong style="color: var(--accent-gold);">number</strong> and the <strong style="color: var(--accent-gold);">name</strong> associated with it.</p>
+      <p style="color: var(--accent-teal); font-weight: bold; font-size: 1.2rem;">✍ Make a note of each number and its name — you will need them later for the final equation.</p>
+      <p style="color: var(--text-secondary);">There are 6 images to study. Take your time.</p>
+      <button style="margin-top: 2rem;" onclick="nav('round2-date'); reportProgress('Round 2: Date Challenge');">I'm Ready — Show Images →</button>
     </div>
   </div>
 
