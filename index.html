@@ -405,7 +405,7 @@
         <div id="solved-year" class="jigsaw-solved form-group">
           <p style="color: var(--success); font-weight: bold;">[ IMAGE RECONSTRUCTED ]</p>
           <input type="text" id="input-year" placeholder="Enter the year..." autocomplete="off">
-          <button onclick="checkAnswer('year', 'r1_year', null, 'round1-month', 'Round 1: Month Challenge', () => initJigsaw('jigsaw-month', 'assets/r1_month.jpg', 4, 'solved-month'))">Restore Memory</button>
+          <button id="btn-year" onclick="checkAnswer('year', 'r1_year', null, 'round1-month', 'Round 1: Month Challenge', () => initJigsaw('jigsaw-month', 'assets/r1_month.jpg', 4, 'solved-month'))">Restore Memory</button>
           <div id="fb-year" class="feedback"></div>
         </div>
       </div>
@@ -431,7 +431,7 @@
         <div id="solved-month" class="jigsaw-solved form-group">
           <p style="color: var(--success); font-weight: bold;">[ IMAGE RECONSTRUCTED ]</p>
           <input type="text" id="input-month" placeholder="Enter the month..." autocomplete="off">
-          <button onclick="checkAnswer('month', 'r1_month', null, 'round2-reminder', 'Round 2: Date Challenge')">Restore Timeline</button>
+          <button id="btn-month" onclick="checkAnswer('month', 'r1_month', null, 'round2-reminder', 'Round 2: Date Challenge')">Restore Timeline</button>
           <div id="fb-month" class="feedback"></div>
         </div>
       </div>
@@ -468,7 +468,7 @@
         <div class="riddle" id="r2-riddle">Riddle text...</div>
         <div class="form-group">
           <input type="text" id="r2-input" placeholder="Enter hidden number..." autocomplete="off">
-          <button onclick="checkR2Answer()">Submit</button>
+          <button id="btn-r2" onclick="checkR2Answer()">Submit</button>
           <div id="fb-r2" class="feedback"></div>
         </div>
       </div>
@@ -789,6 +789,25 @@
       nav('intro');
     }
 
+    // Cooldown after wrong answer
+    function startCooldown(btnId, fbEl, seconds) {
+      let remaining = seconds;
+      const btn = document.getElementById(btnId);
+      btn.disabled = true;
+      const origText = btn.textContent;
+      const interval = setInterval(() => {
+        remaining--;
+        btn.textContent = `Wait ${remaining}s`;
+        if (remaining <= 0) {
+          clearInterval(interval);
+          btn.disabled = false;
+          btn.textContent = origText;
+          fbEl.className = 'feedback';
+          fbEl.innerText = '';
+        }
+      }, 1000);
+    }
+
     // Generic Answer Check (server-verified)
     async function checkAnswer(inputId, puzzleKey, imgId, nextViewId, nextStageName, callback) {
       const val = document.getElementById('input-' + inputId).value.trim();
@@ -812,6 +831,7 @@
         } else {
           fb.innerText = "Incorrect data. Memory corrupted. Try again.";
           fb.className = "feedback error";
+          startCooldown('btn-' + inputId, fb, 20);
         }
       } catch (e) {
         fb.innerText = "Server error. Please try again.";
@@ -951,6 +971,7 @@
         } else {
           fb.innerText = "Incorrect answer.";
           fb.className = "feedback error";
+          startCooldown('btn-r2', fb, 20);
         }
       } catch (e) {
         fb.innerText = "Server error. Please try again.";
@@ -1075,8 +1096,19 @@
       } else {
         fb.textContent = '✗ Incorrect. Try again.';
         fb.className = 'decode-feedback error';
-        input.value = '';
-        input.focus();
+        document.getElementById('decode-submit').disabled = true;
+        let remaining = 20;
+        const interval = setInterval(() => {
+          remaining--;
+          document.getElementById('decode-submit').textContent = `Wait ${remaining}s`;
+          if (remaining <= 0) {
+            clearInterval(interval);
+            document.getElementById('decode-submit').disabled = false;
+            document.getElementById('decode-submit').textContent = 'Submit';
+            fb.textContent = '';
+            fb.className = 'decode-feedback';
+          }
+        }, 1000);
       }
     }
 
@@ -1109,6 +1141,20 @@
         } else {
           fb.textContent = 'Incorrect coordinates. Check the clues and try again.';
           fb.style.color = '#ff3b5c';
+          const btn = document.getElementById('verify-coord-btn');
+          btn.disabled = true;
+          let remaining = 20;
+          const origText = btn.textContent;
+          const interval = setInterval(() => {
+            remaining--;
+            btn.textContent = `Wait ${remaining}s`;
+            if (remaining <= 0) {
+              clearInterval(interval);
+              btn.disabled = false;
+              btn.textContent = origText;
+              fb.textContent = '';
+            }
+          }, 1000);
         }
       } catch (e) {
         fb.textContent = 'Server error. Please try again.';
