@@ -32,6 +32,111 @@
       justify-content: center;
       padding: 2rem 1rem;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        linear-gradient(rgba(0, 212, 184, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 184, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+      animation: gridScroll 12s linear infinite;
+    }
+
+    @keyframes gridScroll {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(0, 212, 184, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(255, 59, 92, 0.04) 0%, transparent 50%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 20px,
+          rgba(0, 212, 184, 0.015) 20px,
+          rgba(0, 212, 184, 0.015) 21px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .timeline-ring {
+      position: fixed;
+      border: 1px solid rgba(0, 212, 184, 0.06);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      animation: ringPulse 6s ease-in-out infinite;
+    }
+    .timeline-ring:nth-child(1) {
+      width: 600px; height: 600px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: 0s;
+    }
+    .timeline-ring:nth-child(2) {
+      width: 400px; height: 400px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: 2s;
+    }
+    .timeline-ring:nth-child(3) {
+      width: 200px; height: 200px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: 4s;
+    }
+
+    @keyframes ringPulse {
+      0% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); border-color: rgba(0, 212, 184, 0.12); }
+      100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .clock-tick {
+      position: fixed;
+      width: 1px;
+      height: 30px;
+      background: linear-gradient(to top, transparent, rgba(0, 212, 184, 0.08));
+      pointer-events: none;
+      z-index: 0;
+      animation: tickFade 4s ease-in-out infinite;
+    }
+
+    @keyframes tickFade {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .view, .card, .phone-wrapper, button, input, table, .decode-panel, .morse-ref-overlay {
+      position: relative;
+      z-index: 1;
+    }
+
+    .scanline {
+      position: fixed;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: rgba(0, 212, 184, 0.08);
+      pointer-events: none;
+      z-index: 9999;
+      animation: scanMove 4s linear infinite;
+    }
+
+    @keyframes scanMove {
+      0% { top: 0; }
+      100% { top: 100vh; }
     }
 
     .view {
@@ -360,6 +465,11 @@
   </style>
 </head>
 <body>
+
+  <div class="timeline-ring"></div>
+  <div class="timeline-ring"></div>
+  <div class="timeline-ring"></div>
+  <div class="scanline"></div>
 
   <!-- LOGIN -->
   <div id="view-login" class="view active">
